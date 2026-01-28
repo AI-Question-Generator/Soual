@@ -28,6 +28,9 @@ yarn-error.log
 !.vscode/extensions.json
 .history/*
 
+# GitHub files
+.github/*
+
 # Miscellaneous
 /.angular/cache
 .sass-cache/
