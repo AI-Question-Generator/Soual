@@ -4,6 +4,6 @@
 
 @import 'tailwindcss';
 
-@theme {
+:root {
   --font-family-arabic: 'IBM Plex Sans Arabic', sans-serif;
 }
