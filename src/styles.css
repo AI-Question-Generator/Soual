@@ -1,9 +1,72 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap');
 
 @import 'tailwindcss';
+@import 'primeicons/primeicons.css';
 
-:root {
-  --font-family-arabic: 'IBM Plex Sans Arabic', sans-serif;
+@theme {
+  --font-IBM: 'IBM Plex Sans Arabic', sans-serif;
+  --font-almarai: 'Almarai', sans-serif;
+
+  --font-sans: var(--font-almarai);
+
+  --color-main-50: #dbeafe;
+  --color-main-100: #bfdbfe;
+  --color-main-200: #93c5fd;
+  --color-main-300: #60a5fa;
+  --color-main-400: #3b82f6;
+  --color-main-500: #2563eb;
+  --color-main-600: #1d4ed8;
+  --color-main-700: #1e40af;
+  --color-main-800: #1e3a8a;
+  --color-main-900: #172554;
+  --color-main-950: #172554;
+
+  --color-secondary-50: #d1fae5;
+  --color-secondary-100: #a7f3d0;
+  --color-secondary-200: #6ee7b7;
+  --color-secondary-300: #34d399;
+  --color-secondary-400: #10b981;
+  --color-secondary-500: #059669;
+  --color-secondary-600: #047857;
+  --color-secondary-700: #065f46;
+  --color-secondary-800: #064e3b;
+  --color-secondary-900: #022c22;
+  --color-secondary-950: #022c22;
+
+  --color-primary: var(--color-main-500);
+}
+
+@base {
+  html,
+  body,
+  .p-component {
+    font-family: var(--font-IBM);
+  }
+}
+
+@utility container {
+  padding-left: 3rem;
+  padding-right: 3rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@utility flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@utility flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@utility flex-col-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
