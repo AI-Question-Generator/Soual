@@ -1,0 +1,97 @@
+<nav class="container py-8 flex-between gap-4">
+  <!-- Logo Section -->
+  <div class="cursor-pointer font-IBM" routerLink="/">
+    <span class="text-2xl text-main-600 font-bold">سؤال</span>
+  </div>
+
+  <!-- Navigation Links -->
+  <div class="hidden md:flex items-center gap-6 lg:gap-8 text-slate-600 font-medium">
+    <a routerLink="/" class="hover:text-main-600 transition-colors">الرئيسية</a>
+    <a routerLink="/features" class="hover:text-main-600 transition-colors">المميزات</a>
+    <a routerLink="/pricing" class="hover:text-main-600 transition-colors">الأسعار</a>
+    <a routerLink="/contact" class="hover:text-main-600 transition-colors">اتصل بنا</a>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="hidden md:flex items-center gap-3 font-IBM">
+    <p-button label="ابدأ الآن مجاناً" icon="pi pi-bolt" />
+    <p-button label="تسجيل الدخول" outlined icon="pi pi-sign-in" />
+  </div>
+
+  <p-button class="md:hidden" [text]="true" (click)="menuOpen = true">
+    <i class="pi pi-bars text-2xl text-main-600"></i>
+  </p-button>
+</nav>
+
+<p-drawer position="right" [(visible)]="menuOpen">
+  <ng-template pTemplate="header">
+    <div class="flex items-center gap-3 font-IBM">
+      <div class="w-8 h-8 rounded-lg bg-primary/10 flex-center text-primary">
+        <i class="pi pi-box text-xl"></i>
+      </div>
+      <span class="font-bold text-xl text-slate-900">سؤال</span>
+    </div>
+  </ng-template>
+
+  <div class="h-full flex flex-col">
+    <div class="flex flex-col gap-2 pt-3">
+      <a
+        routerLink="/"
+        class="flex items-center gap-4 p-3 rounded-xl transition-all duration-200 hover:bg-slate-50 text-slate-600 hover:text-slate-900 group"
+        (click)="menuOpen = false"
+      >
+        <i class="pi pi-home text-lg group-hover:scale-110 transition-transform"></i>
+        <span class="text-lg">الرئيسية</span>
+      </a>
+
+      <a
+        routerLink="/features"
+        class="flex items-center gap-4 p-3 rounded-xl transition-all duration-200 hover:bg-slate-50 text-slate-600 hover:text-slate-900 group"
+        (click)="menuOpen = false"
+      >
+        <i class="pi pi-star text-lg group-hover:scale-110 transition-transform"></i>
+        <span class="text-lg">المميزات</span>
+      </a>
+
+      <a
+        routerLink="/pricing"
+        class="flex items-center gap-4 p-3 rounded-xl transition-all duration-200 hover:bg-slate-50 text-slate-600 hover:text-slate-900 group"
+        (click)="menuOpen = false"
+      >
+        <i class="pi pi-tag text-lg group-hover:scale-110 transition-transform"></i>
+        <span class="text-lg">الأسعار</span>
+      </a>
+
+      <a
+        routerLink="/contact"
+        class="flex items-center gap-4 p-3 rounded-xl transition-all duration-200 hover:bg-slate-50 text-slate-600 hover:text-slate-900 group"
+        (click)="menuOpen = false"
+      >
+        <i class="pi pi-envelope text-lg group-hover:scale-110 transition-transform"></i>
+        <span class="text-lg">اتصل بنا</span>
+      </a>
+    </div>
+
+    <div class="mt-auto flex flex-col gap-4 px-2">
+      <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">المساعدة</span>
+      <a href="#" class="text-sm text-slate-500 hover:text-primary transition-colors"
+        >مركز المساعدة</a
+      >
+      <a href="#" class="text-sm text-slate-500 hover:text-primary transition-colors"
+        >الشروط والأحكام</a
+      >
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex flex-col gap-3 w-full font-IBM">
+      <p-button label="ابدأ الآن مجاناً" icon="pi pi-bolt" styleClass="w-full !py-3" />
+      <p-button
+        label="تسجيل الدخول"
+        icon="pi pi-sign-in"
+        styleClass="w-full !py-3 !bg-slate-50 !text-slate-700 !border-slate-200 hover:!bg-slate-100"
+        outlined
+      />
+    </div>
+  </ng-template>
+</p-drawer>
