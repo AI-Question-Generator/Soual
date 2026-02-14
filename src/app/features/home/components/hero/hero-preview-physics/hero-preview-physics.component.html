@@ -1,0 +1,61 @@
+<div
+  class="min-w-72 bg-main-600 text-white rounded-2xl p-5 transition-all duration-300 sm:-rotate-1 sm:hover:rotate-0 box-shadow"
+>
+  <div class="flex items-center justify-between mb-4">
+    <div class="flex items-center gap-2">
+      <span class="w-9 h-9 rounded-md bg-white/5 flex-center border border-white/20">
+        <i class="pi pi-bolt text-sm"></i>
+      </span>
+      <div>
+        <h4 class="font-bold text-sm">الفيزياء</h4>
+        <span class="text-xs text-main-100">الفصل الأول: التيار الكهربي</span>
+      </div>
+    </div>
+    <div class="text-xs bg-main-700/50 px-2 py-1 rounded-md border border-main-400/30 font-mono">
+      {{ minutesTimer() }}:{{ secondsTimer() }}
+    </div>
+  </div>
+
+  <div class="space-y-4">
+    <div class="bg-main-700/40 rounded-xl p-3 border border-main-400/20 text-center">
+      <span class="font-mono text-sm tracking-widest text-white/90 font-bold">P = I² × R</span>
+    </div>
+
+    <p class="text-sm leading-relaxed font-medium">
+      إذا كانت القدرة المستهلكة في مقاومة (10Ω) هي (40W)، فإن شدة التيار المار فيها تساوي:
+    </p>
+
+    <div class="grid grid-cols-2 gap-2">
+      <button
+        type="button"
+        class="px-3 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs border border-white/10 transition-all duration-200"
+      >
+        4A
+      </button>
+
+      <button
+        type="button"
+        class="relative px-3 py-2.5 rounded-xl bg-white text-main-700 text-xs font-bold shadow-lg transform active:scale-95 transition-all"
+      >
+        2A
+        <i
+          class="pi pi-check-circle absolute -top-1 -left-1 text-white bg-main-800 rounded-full text-[10px]"
+        ></i>
+      </button>
+
+      <button
+        type="button"
+        class="px-3 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs border border-white/10 transition-all duration-200"
+      >
+        0.5A
+      </button>
+
+      <button
+        type="button"
+        class="px-3 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs border border-white/10 transition-all duration-200"
+      >
+        20A
+      </button>
+    </div>
+  </div>
+</div>
