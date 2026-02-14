@@ -1,6 +1,6 @@
 <nav class="container py-8 flex-between gap-4">
   <!-- Logo Section -->
-  <div class="cursor-pointer font-IBM" routerLink="/">
+  <div class="cursor-pointer" routerLink="/">
     <span class="text-2xl text-main-600 font-bold">سؤال</span>
   </div>
 
@@ -13,7 +13,7 @@
   </div>
 
   <!-- Action Buttons -->
-  <div class="hidden md:flex items-center gap-3 font-IBM">
+  <div class="hidden md:flex items-center gap-3">
     <p-button label="ابدأ الآن مجاناً" icon="pi pi-bolt" />
     <p-button label="تسجيل الدخول" outlined icon="pi pi-sign-in" />
   </div>
@@ -25,7 +25,7 @@
 
 <p-drawer position="right" [(visible)]="menuOpen">
   <ng-template pTemplate="header">
-    <div class="flex items-center gap-3 font-IBM">
+    <div class="flex items-center gap-3">
       <div class="w-8 h-8 rounded-lg bg-primary/10 flex-center text-primary">
         <i class="pi pi-box text-xl"></i>
       </div>
@@ -84,7 +84,7 @@
   </div>
 
   <ng-template pTemplate="footer">
-    <div class="flex flex-col gap-3 w-full font-IBM">
+    <div class="flex flex-col gap-3 w-full">
       <p-button label="ابدأ الآن مجاناً" icon="pi pi-bolt" styleClass="w-full !py-3" />
       <p-button
         label="تسجيل الدخول"
