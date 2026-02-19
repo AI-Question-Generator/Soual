@@ -1,0 +1,90 @@
+<section class="py-16">
+  <div class="container max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="text-center mb-12 lg:mb-16">
+      <div
+        class="inline-flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-full mb-6 border border-slate-200"
+      >
+        <span class="w-2 h-2 rounded-full bg-main-500"></span>
+        <span class="text-xs font-medium text-slate tracking-wide">الأسئلة الشائعة والدعم</span>
+      </div>
+
+      <h2 class="text-3xl lg:text-4xl font-bold text-slate-900 mb-4 tracking-tight">
+        الأسئلة الشائعة
+      </h2>
+      <p class="text-lg text-slate-500 font-light">
+        إجابات على أكثر الاستفسارات شيوعاً حول منصة سؤال
+      </p>
+    </div>
+
+    <!-- FAQ Accordion -->
+    <div class="space-y-4">
+      @for (item of faqs; track item.question; let i = $index) {
+        <div
+          class="border rounded-xl transition-all duration-300 overflow-hidden"
+          [ngClass]="{
+            'border-main-200 bg-main-50/30': openIndex() === i,
+            'border-slate-200 hover:border-slate-300': openIndex() !== i,
+          }"
+        >
+          <button
+            type="button"
+            class="w-full flex-between p-5 text-right bg-transparent focus:outline-hidden"
+            (click)="toggle(i)"
+          >
+            <span
+              class="font-bold text-lg transition-colors"
+              [ngClass]="{
+                'text-main-700': openIndex() === i,
+                'text-slate-800': openIndex() !== i,
+              }"
+            >
+              {{ item.question }}
+            </span>
+            <span
+              class="flex-center cursor-pointer w-8 h-8 rounded-full transition-all duration-300"
+              [ngClass]="{
+                'bg-main-100 text-main-600 rotate-180': openIndex() === i,
+                'bg-slate-100 text-slate-500': openIndex() !== i,
+              }"
+            >
+              <i class="pi pi-chevron-down text-xs"></i>
+            </span>
+          </button>
+
+          <div
+            class="grid transition-all duration-300 ease-in-out"
+            [ngClass]="{
+              'grid-rows-[1fr] opacity-100': openIndex() === i,
+              'grid-rows-[0fr] opacity-0': openIndex() !== i,
+            }"
+          >
+            <div class="overflow-hidden">
+              <div
+                class="p-5 pt-0 text-slate-600 leading-relaxed border-t border-transparent"
+                [ngClass]="{
+                  'border-main-100': openIndex() === i,
+                  'pt-4': openIndex() === i,
+                }"
+              >
+                {{ item.answer }}
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Contact Support CTA -->
+    <div class="mt-12 text-center">
+      <p class="text-slate-500 mb-4">لم تجد إجابة لسؤالك؟</p>
+      <button
+        type="button"
+        class="inline-flex cursor-pointer items-center gap-2 text-main-600 font-bold hover:text-main-700 hover:underline transition-all"
+      >
+        <span>تواصل مع فريق الدعم</span>
+        <i class="pi pi-arrow-left text-xs"></i>
+      </button>
+    </div>
+  </div>
+</section>
