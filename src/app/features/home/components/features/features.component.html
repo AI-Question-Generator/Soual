@@ -1,0 +1,83 @@
+<section class="py-16 lg:py-22">
+  <div class="container">
+    <!-- Section Header -->
+    <div class="max-w-3xl mx-auto space-y-6 mb-16 lg:mb-20 text-center">
+      <div
+        class="inline-flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-full border border-slate-200"
+      >
+        <span class="w-2 h-2 rounded-full bg-main-600"></span>
+        <span class="text-xs font-medium text-slate-700 tracking-wide">قدرات المنصة</span>
+      </div>
+
+      <h2 class="text-4xl lg:text-5xl font-bold text-slate-900 leading-tight">
+        كل ما يحتاجه معلم الثانوية العامة
+        <span class="relative inline-block mt-2">
+          <span class="relative z-10 text-main-700">لإعداد أسئلة دقيقة وسريعة</span>
+          <span
+            class="max-[481px]:hidden absolute bottom-2 inset-x-0 h-3 bg-main-100 opacity-50"
+          ></span>
+        </span>
+      </h2>
+
+      <p class="text-xl text-slate-500 leading-relaxed font-light max-w-2xl mx-auto">
+        أنشئ أسئلة واختبارات متوافقة مع منهج الثانوية العامة المصرية، ونظّم بنك أسئلتك بسهولة، مع
+        تحكم كامل في مستوى الصعوبة ونوع السؤال.
+      </p>
+    </div>
+
+    <!-- Core Features Grid (Top 3) -->
+    <div class="grid lg:grid-cols-3 gap-8 mb-8">
+      @for (feature of features.slice(0, 3); track feature.title; let i = $index) {
+        <div
+          class="group overflow-hidden relative h-full border border-slate-200 rounded-xl p-8 transition-all duration-300 hover:border-main-200 hover:shadow-xl hover:shadow-slate-200/40"
+        >
+          <!-- Subtle top line on hover -->
+          <div
+            class="absolute top-0 inset-x-0 h-1 bg-main-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"
+          ></div>
+
+          <!-- Icon Area -->
+          <div class="mb-6 flex justify-between items-start">
+            <div
+              class="w-14 h-14 rounded-lg bg-slate-50 border border-slate-100 flex-center text-main-700 group-hover:bg-main-50 group-hover:border-main-100 transition-colors duration-300"
+            >
+              <i [class]="`pi text-2xl ${feature.icon}`"></i>
+            </div>
+            <span
+              class="text-xs font-mono text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              >0{{ i + 1 }}</span
+            >
+          </div>
+
+          <h3 class="text-xl font-bold text-slate-900 mb-3">{{ feature.title }}</h3>
+          <p class="text-slate-500 leading-relaxed">{{ feature.description }}</p>
+
+          <!-- Learn More Link -->
+          <div
+            class="mt-6 flex items-center text-main-700 text-sm font-medium opacity-0 cursor-pointer transform translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300"
+          >
+            <span>اقرأ المزيد</span>
+            <i class="pi pi-arrow-left text-xs mr-2"></i>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Supporting Features Grid (Bottom 3) -->
+    <div class="grid md:grid-cols-3 gap-6">
+      @for (feature of features.slice(3, 6); track feature.title) {
+        <div
+          class="bg-slate-50 rounded-xl p-5 border border-slate-100 flex items-start gap-4 hover:bg-white hover:border-slate-200 hover:shadow-sm transition-all duration-200"
+        >
+          <div class="shrink-0 mt-1">
+            <i [class]="`pi text-slate-400 ${feature.icon}`"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-800 text-sm mb-1">{{ feature.title }}</h4>
+            <p class="text-slate-500 text-sm leading-relaxed">{{ feature.description }}</p>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
