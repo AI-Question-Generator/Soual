@@ -1,24 +1,14 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { NgOptimizedImage } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { FloatLabel } from 'primeng/floatlabel';
+import { SelectButtonModule } from 'primeng/selectbutton';
 import { AuthService } from '@core/services/auth/auth.service';
-
-function passwordMatchValidator(control: AbstractControl) {
-  const password = control.get('password')?.value;
-  const confirmPassword = control.get('confirmPassword')?.value;
-  return password === confirmPassword ? null : { passwordMismatch: true };
-}
+import { passwordMatchValidator } from '@shared/validators/password-match.validator';
 
 @Component({
   selector: 'soual-register',
@@ -30,6 +20,7 @@ function passwordMatchValidator(control: AbstractControl) {
     InputTextModule,
     PasswordModule,
     FloatLabel,
+    SelectButtonModule,
   ],
   templateUrl: './register.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -39,17 +30,31 @@ export class RegisterComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
 
+  readonly roleOptions = [
+    { label: 'طالب', value: 'student' },
+    { label: 'معلم', value: 'teacher' },
+  ];
+
   isLoading = signal(false);
   errorMessage = signal('');
 
   form = new FormGroup(
     {
-      name: new FormControl('', {
-        validators: [Validators.required, Validators.minLength(3), Validators.maxLength(50)],
+      username: new FormControl('', {
+        validators: [Validators.required, Validators.minLength(1), Validators.maxLength(50)],
         nonNullable: true,
       }),
       email: new FormControl('', {
         validators: [Validators.required, Validators.email],
+        nonNullable: true,
+      }),
+      role: new FormControl<'student' | 'teacher'>('student', {
+        validators: [Validators.required],
+      }),
+      firstName: new FormControl('', {
+        nonNullable: true,
+      }),
+      lastName: new FormControl('', {
         nonNullable: true,
       }),
       password: new FormControl('', {
@@ -64,8 +69,8 @@ export class RegisterComponent {
     { validators: passwordMatchValidator },
   );
 
-  get nameInvalid() {
-    const c = this.form.controls.name;
+  get usernameInvalid() {
+    const c = this.form.controls.username;
     return c.touched && c.dirty && c.invalid;
   }
 
@@ -79,6 +84,11 @@ export class RegisterComponent {
     return c.touched && c.dirty && c.invalid;
   }
 
+  get roleInvalid() {
+    const c = this.form.controls.role;
+    return c.touched && c.invalid;
+  }
+
   get confirmPasswordInvalid() {
     return this.form.controls.confirmPassword.touched && this.form.hasError('passwordMismatch');
   }
@@ -89,19 +99,34 @@ export class RegisterComponent {
       return;
     }
 
+    const payload = {
+      username: this.form.controls.username.value,
+      email: this.form.controls.email.value,
+      password: this.form.controls.password.value,
+      confirmPassword: this.form.controls.confirmPassword.value,
+      role: this.form.controls.role.value,
+      firstName: this.form.controls.firstName.value,
+      lastName: this.form.controls.lastName.value,
+    };
+
+    console.log('Register payload:', payload);
+
     this.isLoading.set(true);
     this.errorMessage.set('');
 
     this.authService
       .signup({
-        name: this.form.controls.name.value,
-        email: this.form.controls.email.value,
-        password: this.form.controls.password.value,
+        username: payload.username,
+        email: payload.email,
+        password: payload.password,
+        role: payload.role,
+        firstName: payload.firstName,
+        lastName: payload.lastName,
       })
       .subscribe({
         next: () => {
           this.isLoading.set(false);
-          this.router.navigate(['/auth/login']);
+          this.router.navigate(['/login']);
           console.log('Account created successfully');
         },
         error: () => {
