@@ -1,0 +1,229 @@
+<div class="min-h-screen flex" dir="ltr">
+  <!-- Left: Robot Image -->
+  <div class="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-slate-900">
+    <img
+      ngSrc="/images/robot-register.jpeg"
+      alt="مساعد سؤال الذكي"
+      fill
+      priority
+      class="object-cover object-center opacity-90"
+    />
+    <!-- Gradient Overlay -->
+    <div
+      class="absolute inset-0 bg-linear-to-t from-slate-900/90 via-slate-900/40 to-transparent"
+    ></div>
+  </div>
+
+  <!-- Right: Register Form -->
+  <div class="relative w-full lg:w-1/2 flex-center p-6 md:p-12 bg-white" dir="rtl">
+    <div class="w-full max-w-md space-y-6">
+      <!-- Logo -->
+      <div class="absolute top-8 right-8">
+        <a routerLink="/">
+          <span class="text-3xl font-extrabold text-main-600">سؤال</span>
+        </a>
+      </div>
+      <!-- Header -->
+      <div class="text-center space-y-3" dir="rtl">
+        <h1 class="text-3xl lg:text-4xl font-bold text-slate-900 leading-tight">
+          ابدأ رحلتك مع سؤال!
+        </h1>
+
+        <p class="text-slate-500 text-base lg:text-lg leading-relaxed max-w-md mx-auto">
+          أنشئ حسابك للوصول إلى مساعدك الذكي في إنشاء الأسئلة.
+        </p>
+      </div>
+
+      <!-- Form -->
+      <form novalidate class="flex flex-col gap-5" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <!-- Row 1: Username & Email -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Username Field -->
+          <div class="flex flex-col gap-1">
+            <p-floatLabel variant="on">
+              <input
+                pInputText
+                id="username"
+                type="text"
+                formControlName="username"
+                autocomplete="username"
+                class="w-full bg-slate-50 border-slate-200 focus:border-main-500 rounded-lg py-3"
+                [class.ng-invalid]="usernameInvalid"
+                [class.ng-dirty]="usernameInvalid"
+              />
+              <label for="username" class="text-slate-500">اسم المستخدم</label>
+            </p-floatLabel>
+
+            @if (usernameInvalid) {
+              <small class="text-red-500 text-xs px-1 block">
+                @if (form.controls.username.errors?.['required']) {
+                  اسم المستخدم مطلوب
+                } @else if (form.controls.username.errors?.['minlength']) {
+                  اسم المستخدم قصير جداً
+                }
+              </small>
+            }
+          </div>
+
+          <!-- Email Field -->
+          <div class="flex flex-col gap-1">
+            <p-floatLabel variant="on">
+              <input
+                pInputText
+                id="email"
+                type="email"
+                formControlName="email"
+                autocomplete="email"
+                class="w-full text-left bg-slate-50 border-slate-200 focus:border-main-500 rounded-lg py-3"
+                dir="ltr"
+                [class.ng-invalid]="emailInvalid"
+                [class.ng-dirty]="emailInvalid"
+              />
+              <label for="email" class="text-slate-500">البريد الإلكتروني</label>
+            </p-floatLabel>
+
+            @if (emailInvalid) {
+              <small class="text-red-500 text-xs px-1 block">
+                @if (form.controls.email.errors?.['required']) {
+                  البريد الإلكتروني مطلوب
+                } @else if (form.controls.email.errors?.['email']) {
+                  بريد غير صحيح
+                }
+              </small>
+            }
+          </div>
+        </div>
+
+        <!-- Row 2: Role -->
+        <div class="flex flex-col gap-1.5">
+          <label for="role" class="text-sm text-slate-600 px-1 font-medium">نوع الحساب</label>
+          <p-selectbutton
+            inputId="role"
+            formControlName="role"
+            optionLabel="label"
+            optionValue="value"
+            styleClass="w-full"
+            [options]="roleOptions"
+            [allowEmpty]="false"
+            [invalid]="roleInvalid"
+          />
+          @if (roleInvalid) {
+            <small class="text-red-500 text-xs px-1 block">يرجى اختيار نوع الحساب</small>
+          }
+        </div>
+
+        <!-- Row 3: First & Last Name -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1">
+            <p-floatLabel variant="on">
+              <input
+                pInputText
+                id="firstName"
+                type="text"
+                formControlName="firstName"
+                autocomplete="given-name"
+                class="w-full bg-slate-50 border-slate-200 focus:border-main-500 rounded-lg py-3"
+              />
+              <label for="firstName" class="text-slate-500">الاسم الأول (اختياري)</label>
+            </p-floatLabel>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <p-floatLabel variant="on">
+              <input
+                pInputText
+                id="lastName"
+                type="text"
+                formControlName="lastName"
+                autocomplete="family-name"
+                class="w-full bg-slate-50 border-slate-200 focus:border-main-500 rounded-lg py-3"
+              />
+              <label for="lastName" class="text-slate-500">الاسم الثاني (اختياري)</label>
+            </p-floatLabel>
+          </div>
+        </div>
+
+        <!-- Row 4: Passwords -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Password Field -->
+          <div class="flex flex-col gap-1">
+            <p-floatLabel variant="on">
+              <p-password
+                inputId="password"
+                formControlName="password"
+                class="w-full"
+                inputStyleClass="w-full bg-slate-50 border-slate-200 focus:border-main-500 rounded-lg py-3"
+                [toggleMask]="true"
+                [feedback]="false"
+                [class.ng-invalid]="passwordInvalid"
+                [class.ng-dirty]="passwordInvalid"
+              />
+              <label for="password" class="text-slate-500">كلمة المرور</label>
+            </p-floatLabel>
+
+            @if (passwordInvalid) {
+              <small class="text-red-500 text-xs px-1 block">
+                @if (form.controls.password.errors?.['required']) {
+                  مطلوبة
+                } @else {
+                  8 أحرف على الأقل
+                }
+              </small>
+            }
+          </div>
+
+          <!-- Confirm Password Field -->
+          <div class="flex flex-col gap-1">
+            <p-floatLabel variant="on">
+              <p-password
+                inputId="confirmPassword"
+                formControlName="confirmPassword"
+                class="w-full"
+                inputStyleClass="w-full bg-slate-50 border-slate-200 focus:border-main-500 rounded-lg py-3"
+                [toggleMask]="true"
+                [feedback]="false"
+                [class.ng-invalid]="confirmPasswordInvalid"
+                [class.ng-dirty]="confirmPasswordInvalid"
+              />
+              <label for="confirmPassword" class="text-slate-500">تأكيد كلمة المرور</label>
+            </p-floatLabel>
+
+            @if (confirmPasswordInvalid) {
+              <small class="text-red-500 text-xs px-1 block">كلمتا المرور غير متطابقتين</small>
+            }
+          </div>
+        </div>
+
+        <!-- Error Message -->
+        @if (errorMessage()) {
+          <div
+            class="flex items-center gap-3 p-4 rounded-xl bg-red-50 border border-red-100 text-red-700 text-sm"
+          >
+            <i class="pi pi-exclamation-circle text-lg"></i>
+            <span>{{ errorMessage() }}</span>
+          </div>
+        }
+
+        <!-- Submit -->
+        <p-button
+          type="submit"
+          label="إنشاء الحساب"
+          styleClass="w-full py-3 text-base font-bold rounded-xl"
+          [loading]="isLoading()"
+        />
+      </form>
+
+      <!-- Footer Links -->
+      <div class="text-center text-sm text-slate-500 border-t border-slate-100 pt-6">
+        لديك حساب بالفعل؟
+        <a
+          routerLink="/login"
+          class="mr-px text-main-600 font-bold hover:text-main-700 hover:underline inline-flex items-center gap-1"
+        >
+          <span>تسجيل الدخول</span>
+          <i class="pi pi-arrow-up-left text-xs"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
