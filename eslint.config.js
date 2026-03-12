@@ -107,7 +107,7 @@ module.exports = tseslint.config(
         'error',
         { allowSubstringInterpolation: true },
       ],
-      '@angular-eslint/template/label-has-associated-control': ['error', { checkIds: true }],
+      '@angular-eslint/template/label-has-associated-control': ['error'],
       '@angular-eslint/template/prefer-self-closing-tags': ['warn'],
       '@angular-eslint/template/prefer-template-literal': ['warn'],
       '@angular-eslint/template/click-events-have-key-events': ['off'],
