@@ -34,29 +34,26 @@
 
     <!-- Form -->
     <form novalidate class="flex flex-col gap-6" [formGroup]="form" (ngSubmit)="onSubmit()">
-      <!-- Email Field -->
+      <!-- Username Field -->
       <div class="flex flex-col gap-1">
         <p-floatLabel variant="on">
           <input
             pInputText
-            id="email"
-            type="email"
-            formControlName="email"
-            autocomplete="email"
-            class="w-full text-left bg-slate-50 border-slate-200 focus:border-main-500 rounded-lg py-3"
-            dir="ltr"
-            [class.ng-invalid]="emailInvalid"
-            [class.ng-dirty]="emailInvalid"
+            id="username"
+            type="text"
+            formControlName="username"
+            autocomplete="username"
+            class="w-full bg-slate-50 border-slate-200 focus:border-main-500 rounded-lg py-3"
+            [class.ng-invalid]="usernameInvalid"
+            [class.ng-dirty]="usernameInvalid"
           />
-          <label for="email" class="text-slate-500">البريد الإلكتروني</label>
+          <label for="username" class="text-slate-500">اسم المستخدم</label>
         </p-floatLabel>
 
-        @if (emailInvalid) {
+        @if (usernameInvalid) {
           <small class="text-red-500 text-xs px-1 block">
-            @if (form.controls.email.errors?.['required']) {
-              البريد الإلكتروني مطلوب
-            } @else if (form.controls.email.errors?.['email']) {
-              يرجى إدخال بريد إلكتروني صحيح
+            @if (form.controls.username.errors?.['required']) {
+              اسم المستخدم مطلوب
             }
           </small>
         }
@@ -121,7 +118,7 @@
     <div class="text-center text-sm text-slate-500 border-t border-slate-100 pt-6">
       ليس لديك حساب؟
       <a
-        routerLink="/auth/register"
+        routerLink="/register"
         class="mr-px text-main-600 font-bold hover:text-main-700 hover:underline inline-flex items-center gap-1"
       >
         <span>إنشاء حساب جديد</span>

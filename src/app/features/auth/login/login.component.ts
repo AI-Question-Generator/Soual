@@ -31,18 +31,18 @@ export class LoginComponent {
   readonly errorMessage = signal('');
 
   form = new FormGroup({
-    email: new FormControl('', {
-      validators: [Validators.required, Validators.email],
+    username: new FormControl('', {
+      validators: [Validators.required, Validators.minLength(1)],
       nonNullable: true,
     }),
     password: new FormControl('', {
-      validators: [Validators.required, Validators.minLength(6)],
+      validators: [Validators.required, Validators.minLength(8)],
       nonNullable: true,
     }),
   });
 
-  get emailInvalid() {
-    const ctrl = this.form.controls.email;
+  get usernameInvalid() {
+    const ctrl = this.form.controls.username;
     return ctrl.invalid && ctrl.touched;
   }
 
@@ -57,24 +57,25 @@ export class LoginComponent {
       return;
     }
 
+    const payload = {
+      username: this.form.controls.username.value,
+      password: this.form.controls.password.value,
+    };
+    console.log('Login Payload:', payload);
+
     this.isLoading.set(true);
     this.errorMessage.set('');
 
-    this.authService
-      .login({
-        email: this.form.controls.email.value,
-        password: this.form.controls.password.value,
-      })
-      .subscribe({
-        next: () => {
-          this.isLoading.set(false);
-          console.log('Login successful');
-        },
-        error: () => {
-          this.isLoading.set(false);
-          this.errorMessage.set('حدث خطأ، يرجى المحاولة مرة أخرى.');
-          console.log('Login failed');
-        },
-      });
+    this.authService.login(payload).subscribe({
+      next: () => {
+        this.isLoading.set(false);
+        console.log('Login successful');
+      },
+      error: () => {
+        this.isLoading.set(false);
+        this.errorMessage.set('حدث خطأ، يرجى المحاولة مرة أخرى.');
+        console.log('Login failed');
+      },
+    });
   }
 }
