@@ -55,6 +55,12 @@ export class LoginComponent {
       return;
     }
 
+    const payload = {
+      username: this.form.controls.username.value,
+      password: this.form.controls.password.value,
+    };
+    console.log('Login Payload:', payload);
+
     this.isLoading.set(true);
     this.errorMessage.set('');
   }

@@ -54,8 +54,11 @@
           <small class="text-red-500 text-xs px-1 block">
             @if (form.controls.username.errors?.['required']) {
               اسم المستخدم مطلوب
+<<<<<<< HEAD
             } @else if (form.controls.username.errors?.['minlength']) {
               اسم المستخدم يجب أن يكون 1 حرف على الأقل
+=======
+>>>>>>> f8010b1 (feat(auth): replace email field with username in login form and update validation)
             }
           </small>
         }
