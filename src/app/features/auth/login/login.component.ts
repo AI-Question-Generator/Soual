@@ -69,6 +69,7 @@ export class LoginComponent {
     this.authService.login(payload).subscribe({
       next: () => {
         this.isLoading.set(false);
+        this.router.navigate(['/']);
         console.log('Login successful');
       },
       error: () => {
