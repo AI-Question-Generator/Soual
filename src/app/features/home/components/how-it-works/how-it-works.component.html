@@ -1,0 +1,56 @@
+<section id="how-it-works" class="py-24 relative overflow-hidden bg-slate-50">
+  <div class="container relative z-10 px-4 md:px-6">
+    <!-- Section Header -->
+    <div class="text-center max-w-3xl mx-auto mb-20">
+      <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">
+        كيف يعمل <span class="text-main-600">سؤال</span>؟
+      </h2>
+      <p class="text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
+        رحلة بسيطة تحول المادة التعليمية إلى اختبار تفاعلي في ثوانٍ معدودة.
+      </p>
+    </div>
+
+    <!-- Steps -->
+    <div class="relative">
+      <!-- Connecting Line (Desktop) -->
+      <div
+        class="hidden md:block absolute top-12 left-0 w-full h-0.5 bg-linear-to-r from-transparent via-slate-300 to-transparent -z-10"
+      ></div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        @for (step of steps; track step.number; let last = $last) {
+          <div class="relative group">
+            <!-- Step Number & Icon -->
+            <div class="flex flex-col items-center mb-6">
+              <div
+                class="w-24 h-24 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-center mb-6 relative group-hover:-translate-y-2 transition-transform duration-300 z-10"
+              >
+                <div
+                  class="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-main-600 text-white flex items-center justify-center font-bold text-sm shadow-md ring-4 ring-slate-50"
+                >
+                  {{ step.number }}
+                </div>
+                <i [class]="`pi ${step.icon} text-3xl text-main-600`"></i>
+              </div>
+
+              <!-- Content -->
+              <h3 class="text-xl font-bold text-slate-900 mb-3 text-center">
+                {{ step.title }}
+              </h3>
+              <p class="text-slate-600 text-center text-sm leading-relaxed px-2">
+                {{ step.description }}
+              </p>
+            </div>
+
+            <!-- Arrow (Mobile only) -->
+            @if (!last) {
+              <div class="md:hidden flex justify-center mb-8 text-slate-300">
+                <i class="pi pi-arrow-down text-2xl animate-bounce"></i>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>
