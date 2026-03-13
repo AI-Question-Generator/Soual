@@ -61,7 +61,6 @@ export class LoginComponent {
       username: this.form.controls.username.value,
       password: this.form.controls.password.value,
     };
-    console.log('Login Payload:', payload);
 
     this.isLoading.set(true);
     this.errorMessage.set('');
@@ -70,12 +69,10 @@ export class LoginComponent {
       next: () => {
         this.isLoading.set(false);
         this.router.navigate(['/']);
-        console.log('Login successful');
       },
       error: () => {
         this.isLoading.set(false);
         this.errorMessage.set('حدث خطأ، يرجى المحاولة مرة أخرى.');
-        console.log('Login failed');
       },
     });
   }

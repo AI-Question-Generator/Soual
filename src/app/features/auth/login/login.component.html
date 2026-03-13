@@ -1,7 +1,7 @@
 <!-- Left: Robot Image -->
 <div class="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-slate-900">
   <img
-    ngSrc="/images/robot-login.png"
+    ngSrc="images/robot-login.png"
     alt="مساعد سؤال الذكي"
     fill
     priority
@@ -54,6 +54,8 @@
           <small class="text-red-500 text-xs px-1 block">
             @if (form.controls.username.errors?.['required']) {
               اسم المستخدم مطلوب
+            } @else if (form.controls.username.errors?.['minlength']) {
+              اسم المستخدم يجب أن يكون 1 حرف على الأقل
             }
           </small>
         }
@@ -80,7 +82,7 @@
             @if (form.controls.password.errors?.['required']) {
               كلمة المرور مطلوبة
             } @else if (form.controls.password.errors?.['minlength']) {
-              كلمة المرور يجب أن تكون 6 أحرف على الأقل
+              كلمة المرور يجب أن تكون 8 أحرف على الأقل
             }
           </small>
         }
