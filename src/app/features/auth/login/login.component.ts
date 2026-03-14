@@ -6,6 +6,10 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { FloatLabel } from 'primeng/floatlabel';
+<<<<<<< HEAD
+=======
+import { AuthService } from '@core/services/auth/auth.service';
+>>>>>>> 1ef11ea2b8904f64e2755152007faab0020b15dd
 
 @Component({
   selector: 'soual-login',
@@ -23,6 +27,10 @@ import { FloatLabel } from 'primeng/floatlabel';
   host: { class: 'min-h-screen flex', dir: 'ltr' },
 })
 export class LoginComponent {
+<<<<<<< HEAD
+=======
+  private readonly authService = inject(AuthService);
+>>>>>>> 1ef11ea2b8904f64e2755152007faab0020b15dd
   private readonly router = inject(Router);
 
   readonly isLoading = signal(false);
@@ -63,5 +71,21 @@ export class LoginComponent {
 
     this.isLoading.set(true);
     this.errorMessage.set('');
+<<<<<<< HEAD
+=======
+
+    this.authService.login(payload).subscribe({
+      next: () => {
+        this.isLoading.set(false);
+        this.router.navigate(['/']);
+        console.log('Login successful');
+      },
+      error: () => {
+        this.isLoading.set(false);
+        this.errorMessage.set('حدث خطأ، يرجى المحاولة مرة أخرى.');
+        console.log('Login failed');
+      },
+    });
+>>>>>>> 1ef11ea2b8904f64e2755152007faab0020b15dd
   }
 }
