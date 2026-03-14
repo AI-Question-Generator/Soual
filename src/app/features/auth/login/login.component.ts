@@ -61,9 +61,18 @@ export class LoginComponent {
       username: this.form.controls.username.value,
       password: this.form.controls.password.value,
     };
-    console.log('Login Payload:', payload);
 
-    this.isLoading.set(true);
-    this.errorMessage.set('');
+    this.authService.login(payload).subscribe({
+      next: (response) => {
+        this.isLoading.set(false);
+        this.authService.setAuthenticatedUser(response);
+        this.router.navigate(['/']);
+      },
+      error: (error) => {
+        this.isLoading.set(false);
+        console.error('Login error:', error);
+        this.errorMessage.set('Invalid username or password.');
+      },
+    });
   }
 }

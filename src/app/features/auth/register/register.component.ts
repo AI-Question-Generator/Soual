@@ -114,26 +114,26 @@ export class RegisterComponent {
     this.isLoading.set(true);
     this.errorMessage.set('');
 
-    // this.authService
-    //   .signup({
-    //     username: payload.username,
-    //     email: payload.email,
-    //     password: payload.password,
-    //     role: payload.role,
-    //     firstName: payload.firstName,
-    //     lastName: payload.lastName,
-    //   })
-    //   .subscribe({
-    //     next: () => {
-    //       this.isLoading.set(false);
-    //       this.router.navigate(['/login']);
-    //       console.log('Account created successfully');
-    //     },
-    //     error: () => {
-    //       this.isLoading.set(false);
-    //       this.errorMessage.set('حدث خطأ أثناء إنشاء الحساب، يرجى المحاولة مرة أخرى.');
-    //       console.log('Failed to create account');
-    //     },
-    //   });
+    this.authService
+      .register({
+        username: payload.username,
+        email: payload.email,
+        password: payload.password,
+        role: payload.role,
+        firstName: payload.firstName,
+        lastName: payload.lastName,
+      })
+      .subscribe({
+        next: () => {
+          this.isLoading.set(false);
+          this.router.navigate(['/login']);
+          console.log('Account created successfully');
+        },
+        error: () => {
+          this.isLoading.set(false);
+          this.errorMessage.set('حدث خطأ أثناء إنشاء الحساب، يرجى المحاولة مرة أخرى.');
+          console.log('Failed to create account');
+        },
+      });
   }
 }
