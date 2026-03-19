@@ -1,1 +1,1 @@
-// Reusable UI components (table, breadcrumb, svg-icon)
+export * from './toast/toast.component';
