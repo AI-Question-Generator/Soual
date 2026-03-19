@@ -14,15 +14,20 @@
 </div>
 
 <!-- Right: Login Form -->
-<div class="relative w-full lg:w-1/2 flex-center p-6 md:p-12" dir="rtl">
-  <div class="w-full max-w-md space-y-8">
-    <!-- Logo -->
-    <div class="absolute top-8 right-8">
-      <a routerLink="/">
-        <span class="text-3xl font-extrabold text-main-600">سؤال</span>
-      </a>
-    </div>
+<div class="relative w-full lg:w-1/2 flex-center p-6 md:p-12 overflow-hidden" dir="rtl">
+  <!-- Background DECORATION (Mobile/Desktop) -->
+  <div class="absolute inset-0 bg-slate-50 -z-20"></div>
+  <div class="absolute inset-0 bg-grid-u-mask opacity-60 -z-10"></div>
 
+  <!-- Gradient Blob -->
+  <div
+    class="absolute -top-24 -left-24 w-64 h-64 bg-main-400/10 blur-3xl rounded-full pointer-events-none mix-blend-multiply animate-float-slow"
+  ></div>
+  <div
+    class="absolute top-1/2 -right-24 w-64 h-64 bg-secondary-400/10 blur-3xl rounded-full pointer-events-none mix-blend-multiply animate-float hidden sm:block"
+  ></div>
+
+  <div class="w-full max-w-md space-y-8 relative z-10">
     <!-- Header -->
     <div class="text-center space-y-2">
       <h1 class="text-3xl lg:text-4xl font-bold text-slate-900 leading-tight">مرحبًا بعودتك!</h1>
@@ -36,6 +41,7 @@
     <form novalidate class="flex flex-col gap-6" [formGroup]="form" (ngSubmit)="onSubmit()">
       <!-- Username Field -->
       <div class="flex flex-col gap-1">
+        @let invalidUsername = isFieldInvalid('username');
         <p-floatLabel variant="on">
           <input
             pInputText
@@ -44,13 +50,13 @@
             formControlName="username"
             autocomplete="username"
             class="w-full bg-slate-50 border-slate-200 focus:border-main-500 rounded-lg py-3"
-            [class.ng-invalid]="usernameInvalid"
-            [class.ng-dirty]="usernameInvalid"
+            [class.ng-invalid]="invalidUsername"
+            [class.ng-dirty]="invalidUsername"
           />
           <label for="username" class="text-slate-500">اسم المستخدم</label>
         </p-floatLabel>
 
-        @if (usernameInvalid) {
+        @if (invalidUsername) {
           <small class="text-red-500 text-xs px-1 block">
             @if (form.controls.username.errors?.['required']) {
               اسم المستخدم مطلوب
@@ -63,6 +69,7 @@
 
       <!-- Password Field -->
       <div class="flex flex-col gap-1">
+        @let invalidPassword = isFieldInvalid('password');
         <p-floatLabel variant="on">
           <p-password
             inputId="password"
@@ -71,13 +78,13 @@
             inputStyleClass="w-full bg-slate-50 border-slate-200 focus:border-main-500 rounded-lg py-3"
             [feedback]="false"
             [toggleMask]="true"
-            [class.ng-invalid]="passwordInvalid"
-            [class.ng-dirty]="passwordInvalid"
+            [class.ng-invalid]="invalidPassword"
+            [class.ng-dirty]="invalidPassword"
           />
           <label for="password" class="text-slate-500">كلمة المرور</label>
         </p-floatLabel>
 
-        @if (passwordInvalid) {
+        @if (invalidPassword) {
           <small class="text-red-500 text-xs px-1 block">
             @if (form.controls.password.errors?.['required']) {
               كلمة المرور مطلوبة

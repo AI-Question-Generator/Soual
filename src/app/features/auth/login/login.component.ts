@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { NgOptimizedImage } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
@@ -25,30 +25,20 @@ import { AuthService } from '@core/services/auth/auth.service';
 })
 export class LoginComponent {
   private readonly authService = inject(AuthService);
+  private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
 
   readonly isLoading = signal(false);
   readonly errorMessage = signal('');
 
-  form = new FormGroup({
-    username: new FormControl('', {
-      validators: [Validators.required, Validators.minLength(1)],
-      nonNullable: true,
-    }),
-    password: new FormControl('', {
-      validators: [Validators.required, Validators.minLength(8)],
-      nonNullable: true,
-    }),
+  form = this.fb.group({
+    username: this.fb.nonNullable.control('', [Validators.required, Validators.minLength(1)]),
+    password: this.fb.nonNullable.control('', [Validators.required, Validators.minLength(8)]),
   });
 
-  get usernameInvalid() {
-    const ctrl = this.form.controls.username;
-    return ctrl.invalid && ctrl.touched;
-  }
-
-  get passwordInvalid() {
-    const ctrl = this.form.controls.password;
-    return ctrl.invalid && ctrl.touched;
+  isFieldInvalid(fieldName: string) {
+    const ctrl = this.form.get(fieldName) as FormControl;
+    return ctrl.invalid && (ctrl.touched || ctrl.dirty);
   }
 
   onSubmit() {
@@ -63,16 +53,17 @@ export class LoginComponent {
     };
 
     this.isLoading.set(true);
-    this.errorMessage.set('');
 
     this.authService.login(payload).subscribe({
-      next: () => {
+      next: (response) => {
         this.isLoading.set(false);
+        this.authService.setAuthenticatedUser(response);
         this.router.navigate(['/']);
       },
-      error: () => {
+      error: (error) => {
         this.isLoading.set(false);
-        this.errorMessage.set('حدث خطأ، يرجى المحاولة مرة أخرى.');
+        console.error('Login error:', error);
+        this.errorMessage.set('Invalid username or password.');
       },
     });
   }
