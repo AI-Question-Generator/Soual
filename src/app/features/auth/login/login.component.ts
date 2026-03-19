@@ -38,7 +38,7 @@ export class LoginComponent {
 
   isFieldInvalid(fieldName: string) {
     const ctrl = this.form.get(fieldName) as FormControl;
-    return ctrl.invalid && (ctrl.touched || ctrl.dirty);
+    return ctrl.invalid && ctrl.dirty && ctrl.touched;
   }
 
   onSubmit() {

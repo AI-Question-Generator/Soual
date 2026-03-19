@@ -58,7 +58,7 @@ export class RegisterComponent {
 
   isFieldInvalid(fieldName: string) {
     const ctrl = this.form.get(fieldName) as FormControl;
-    return ctrl.invalid && (ctrl.touched || ctrl.dirty);
+    return ctrl.invalid && ctrl.touched && ctrl.dirty;
   }
 
   get confirmPasswordInvalid() {
