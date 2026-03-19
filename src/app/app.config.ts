@@ -2,6 +2,7 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/
 import { providePrimeNG } from 'primeng/config';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import Aura from '@primeuix/themes/aura';
+import { MessageService } from 'primeng/api';
 
 import { routes } from './app.routes';
 import { definePreset } from '@primeuix/themes';
@@ -42,6 +43,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes, withComponentInputBinding()),
+    MessageService,
     providePrimeNG({
       theme: {
         preset: SoualPreset,
