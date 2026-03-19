@@ -9,6 +9,7 @@ import { FloatLabel } from 'primeng/floatlabel';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { AuthService } from '@core/services/auth/auth.service';
 import { passwordMatchValidator } from '@shared/validators/password-match.validator';
+import { ToastService } from '@shared/services';
 
 @Component({
   selector: 'soual-register',
@@ -30,6 +31,7 @@ export class RegisterComponent {
   private readonly authService = inject(AuthService);
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
+  private readonly toast = inject(ToastService);
 
   readonly roleOptions = [
     { label: 'طالب', value: 'student' },
@@ -97,9 +99,8 @@ export class RegisterComponent {
       .subscribe({
         next: () => {
           this.isLoading.set(false);
+          this.toast.success('تم إنشاء الحساب بنجاح', 'يمكنك الان تسجيل الدخول');
           this.router.navigate(['/login']);
-          console.log('Account created successfully');
-          // TODO: Show success message
         },
         error: (err) => {
           this.isLoading.set(false);

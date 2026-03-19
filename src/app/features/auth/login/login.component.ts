@@ -7,6 +7,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { FloatLabel } from 'primeng/floatlabel';
 import { AuthService } from '@core/services/auth/auth.service';
+import { ToastService } from '@shared/services';
 
 @Component({
   selector: 'soual-login',
@@ -27,6 +28,7 @@ export class LoginComponent {
   private readonly authService = inject(AuthService);
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
+  private readonly toast = inject(ToastService);
 
   readonly isLoading = signal(false);
   readonly errorMessage = signal('');
@@ -58,6 +60,7 @@ export class LoginComponent {
       next: (response) => {
         this.isLoading.set(false);
         this.authService.setAuthenticatedUser(response);
+        this.toast.success('تم تسجيل الدخول بنجاح', 'مرحباً بك في سؤال!');
         this.router.navigate(['/']);
       },
       error: (error) => {
