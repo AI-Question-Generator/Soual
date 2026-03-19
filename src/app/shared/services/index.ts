@@ -1,1 +1,1 @@
-// Shared services
+export * from './toast.service';
