@@ -17,12 +17,6 @@
   <!-- Right: Register Form -->
   <div class="relative w-full lg:w-1/2 flex-center p-6 md:p-12 bg-white" dir="rtl">
     <div class="w-full max-w-md space-y-6">
-      <!-- Logo -->
-      <div class="absolute top-8 right-8">
-        <a routerLink="/">
-          <span class="text-3xl font-extrabold text-main-600">سؤال</span>
-        </a>
-      </div>
       <!-- Header -->
       <div class="text-center space-y-3" dir="rtl">
         <h1 class="text-3xl lg:text-4xl font-bold text-slate-900 leading-tight">
@@ -40,6 +34,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <!-- Username Field -->
           <div class="flex flex-col gap-1">
+            @let usernameInvalid = isFieldInvalid('username');
             <p-floatLabel variant="on">
               <input
                 pInputText
@@ -67,6 +62,7 @@
 
           <!-- Email Field -->
           <div class="flex flex-col gap-1">
+            @let emailInvalid = isFieldInvalid('email');
             <p-floatLabel variant="on">
               <input
                 pInputText
@@ -96,6 +92,7 @@
 
         <!-- Row 2: Role -->
         <div class="flex flex-col gap-1.5">
+          @let roleInvalid = isFieldInvalid('role');
           <label for="role" class="text-sm text-slate-600 px-1 font-medium">نوع الحساب</label>
           <p-selectbutton
             inputId="role"
@@ -147,6 +144,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <!-- Password Field -->
           <div class="flex flex-col gap-1">
+            @let passwordInvalid = isFieldInvalid('password');
             <p-floatLabel variant="on">
               <p-password
                 inputId="password"
@@ -174,6 +172,7 @@
 
           <!-- Confirm Password Field -->
           <div class="flex flex-col gap-1">
+            @let confirmPasswordInvalid = isFieldInvalid('confirmPassword');
             <p-floatLabel variant="on">
               <p-password
                 inputId="confirmPassword"

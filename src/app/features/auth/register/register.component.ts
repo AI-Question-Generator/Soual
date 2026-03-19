@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { NgOptimizedImage } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
@@ -27,8 +27,9 @@ import { passwordMatchValidator } from '@shared/validators/password-match.valida
   host: { class: 'block' },
 })
 export class RegisterComponent {
-  private authService = inject(AuthService);
-  private router = inject(Router);
+  private readonly authService = inject(AuthService);
+  private readonly fb = inject(FormBuilder);
+  private readonly router = inject(Router);
 
   readonly roleOptions = [
     { label: 'طالب', value: 'student' },
@@ -38,55 +39,26 @@ export class RegisterComponent {
   isLoading = signal(false);
   errorMessage = signal('');
 
-  form = new FormGroup(
+  form = this.fb.group(
     {
-      username: new FormControl('', {
-        validators: [Validators.required, Validators.minLength(1), Validators.maxLength(50)],
-        nonNullable: true,
-      }),
-      email: new FormControl('', {
-        validators: [Validators.required, Validators.email],
-        nonNullable: true,
-      }),
-      role: new FormControl<'student' | 'teacher'>('student', {
-        validators: [Validators.required],
-      }),
-      firstName: new FormControl('', {
-        nonNullable: true,
-      }),
-      lastName: new FormControl('', {
-        nonNullable: true,
-      }),
-      password: new FormControl('', {
-        validators: [Validators.required, Validators.minLength(8)],
-        nonNullable: true,
-      }),
-      confirmPassword: new FormControl('', {
-        validators: [Validators.required],
-        nonNullable: true,
-      }),
+      username: this.fb.nonNullable.control('', [
+        Validators.required,
+        Validators.minLength(1),
+        Validators.maxLength(50),
+      ]),
+      email: this.fb.nonNullable.control('', [Validators.required, Validators.email]),
+      role: this.fb.control<'student' | 'teacher'>('student', [Validators.required]),
+      firstName: this.fb.nonNullable.control(''),
+      lastName: this.fb.nonNullable.control(''),
+      password: this.fb.nonNullable.control('', [Validators.required, Validators.minLength(8)]),
+      confirmPassword: this.fb.nonNullable.control('', [Validators.required]),
     },
     { validators: passwordMatchValidator },
   );
 
-  get usernameInvalid() {
-    const c = this.form.controls.username;
-    return c.touched && c.dirty && c.invalid;
-  }
-
-  get emailInvalid() {
-    const c = this.form.controls.email;
-    return c.touched && c.dirty && c.invalid;
-  }
-
-  get passwordInvalid() {
-    const c = this.form.controls.password;
-    return c.touched && c.dirty && c.invalid;
-  }
-
-  get roleInvalid() {
-    const c = this.form.controls.role;
-    return c.touched && c.invalid;
+  isFieldInvalid(fieldName: string) {
+    const ctrl = this.form.get(fieldName) as FormControl;
+    return ctrl.invalid && (ctrl.touched || ctrl.dirty);
   }
 
   get confirmPasswordInvalid() {
@@ -103,7 +75,6 @@ export class RegisterComponent {
       username: this.form.controls.username.value,
       email: this.form.controls.email.value,
       password: this.form.controls.password.value,
-      confirmPassword: this.form.controls.confirmPassword.value,
       role: this.form.controls.role.value,
       firstName: this.form.controls.firstName.value,
       lastName: this.form.controls.lastName.value,
@@ -128,11 +99,12 @@ export class RegisterComponent {
           this.isLoading.set(false);
           this.router.navigate(['/login']);
           console.log('Account created successfully');
+          // TODO: Show success message
         },
-        error: () => {
+        error: (err) => {
           this.isLoading.set(false);
           this.errorMessage.set('حدث خطأ أثناء إنشاء الحساب، يرجى المحاولة مرة أخرى.');
-          console.log('Failed to create account');
+          console.log('Failed to create account', err);
         },
       });
   }
