@@ -3,11 +3,6 @@ import { subjectRoutes } from '@feature/subjects/subjects.routes';
 
 export const routes: Routes = [
   {
-    path: '',
-    pathMatch: 'full',
-    loadComponent: () => import('@feature/home').then((m) => m.HomeComponent),
-  },
-  {
     path: 'login',
     loadComponent: () =>
       import('@feature/auth/login/login.component').then((m) => m.LoginComponent),
@@ -17,5 +12,17 @@ export const routes: Routes = [
     loadComponent: () =>
       import('@feature/auth/register/register.component').then((m) => m.RegisterComponent),
   },
-  ...subjectRoutes,
+  {
+    path: '',
+    loadComponent: () =>
+      import('@core/layouts/main-layout/main-layout.component').then((m) => m.MainLayoutComponent),
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        loadComponent: () => import('@feature/home').then((m) => m.HomeComponent),
+      },
+      ...subjectRoutes,
+    ],
+  },
 ];
