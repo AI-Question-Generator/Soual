@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { NavbarComponent } from '@core/components';
 import { HeroComponent, FeaturesComponent, FaqComponent } from './components';
 
 @Component({
@@ -7,6 +6,6 @@ import { HeroComponent, FeaturesComponent, FaqComponent } from './components';
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block' },
   templateUrl: './home.component.html',
-  imports: [NavbarComponent, HeroComponent, FeaturesComponent, FaqComponent],
+  imports: [HeroComponent, FeaturesComponent, FaqComponent],
 })
 export class HomeComponent {}
