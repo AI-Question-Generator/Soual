@@ -1,7 +1,7 @@
 export interface Project {
-  id: number;
+  id: string;
   name: string;
   description: string;
   isDefault: boolean;
-  subjectId: number;
+  lessonCount: number;
 }
