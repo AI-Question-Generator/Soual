@@ -1,5 +1,7 @@
+import type { Lesson } from './lesson.interface';
+
 export interface Unit {
-  id: number;
   name: string;
-  projectId: number;
+  subtitle: string;
+  lessons: Lesson[];
 }
