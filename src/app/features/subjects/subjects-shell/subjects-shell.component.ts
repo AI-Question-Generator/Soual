@@ -9,12 +9,8 @@ import { Subjects } from '@feature/subjects/models';
   host: { class: 'block' },
   imports: [RouterOutlet, RouterLink, RouterLinkActive, Tabs, TabList, Tab],
   template: `
-    <div class="flex flex-col h-full container mx-auto mt-6 px-4">
-      <div class="flex items-center justify-between mb-6">
-        <h2 class="text-2xl font-bold">موادك الدراسية</h2>
-      </div>
-
-      <p-tabs class="mb-4" value="english">
+    <div class="flex flex-col h-full container">
+      <p-tabs class="mt-3" value="english">
         <p-tablist>
           @for (subject of subjects; track subject.slug) {
             <p-tab
