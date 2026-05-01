@@ -101,7 +101,6 @@ module.exports = tseslint.config(
       '@angular-eslint/template/prefer-control-flow': ['error'],
       '@angular-eslint/template/no-empty-control-flow': ['error'],
       '@angular-eslint/template/use-track-by-function': ['error'],
-      '@angular-eslint/template/no-duplicate-attributes': ['error'],
       '@angular-eslint/template/prefer-static-string-properties': ['error'],
       '@angular-eslint/template/no-interpolation-in-attributes': [
         'error',
