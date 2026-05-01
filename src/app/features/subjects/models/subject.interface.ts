@@ -1,3 +1,6 @@
+import type { Unit } from './unit.interface';
+import type { Project } from './project.interface';
+
 export type SubjectName =
   | 'english'
   | 'arabic'
@@ -10,6 +13,13 @@ export type SubjectName =
 export interface Subject {
   name: string;
   slug: SubjectName;
+}
+
+export interface SubjectDetail {
+  slug: SubjectName;
+  name: string;
+  units: Unit[];
+  projects: Project[];
 }
 
 export const Subjects: Subject[] = [
