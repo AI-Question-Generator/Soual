@@ -6,13 +6,16 @@ export const subjectRoutes: Routes = [
     path: 'subjects',
     loadComponent: () =>
       import('./subjects-shell/subjects-shell.component').then((m) => m.SubjectsShellComponent),
-    children: Subjects.map((subject) => ({
-      path: subject.slug,
-      loadComponent: () =>
-        import('@feature/subjects/subject-detail/subject-detail.component').then(
-          (m) => m.SubjectDetailComponent,
-        ),
-      data: subject,
-    })),
+    children: [
+      { path: '', pathMatch: 'full', redirectTo: 'english' },
+      ...Subjects.map((subject) => ({
+        path: subject.slug,
+        loadComponent: () =>
+          import('@feature/subjects/subject-detail/subject-detail.component').then(
+            (m) => m.SubjectDetailComponent,
+          ),
+        data: subject,
+      })),
+    ],
   },
 ];
