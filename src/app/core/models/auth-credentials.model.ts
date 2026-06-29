@@ -7,7 +7,7 @@ export interface RegisterCredentials {
   username: string;
   email: string;
   password: string;
-  role: 'student' | 'teacher' | null;
+  password2: string;
   firstName?: string;
   lastName?: string;
 }

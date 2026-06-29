@@ -49,7 +49,6 @@ export class RegisterComponent {
         Validators.maxLength(50),
       ]),
       email: this.fb.nonNullable.control('', [Validators.required, Validators.email]),
-      role: this.fb.control<'student' | 'teacher'>('student', [Validators.required]),
       firstName: this.fb.nonNullable.control(''),
       lastName: this.fb.nonNullable.control(''),
       password: this.fb.nonNullable.control('', [Validators.required, Validators.minLength(8)]),
@@ -77,7 +76,6 @@ export class RegisterComponent {
       username: this.form.controls.username.value,
       email: this.form.controls.email.value,
       password: this.form.controls.password.value,
-      role: this.form.controls.role.value,
       firstName: this.form.controls.firstName.value,
       lastName: this.form.controls.lastName.value,
     };
@@ -92,7 +90,7 @@ export class RegisterComponent {
         username: payload.username,
         email: payload.email,
         password: payload.password,
-        role: payload.role,
+        password2: payload.password,
         firstName: payload.firstName,
         lastName: payload.lastName,
       })
