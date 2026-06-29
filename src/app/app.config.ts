@@ -6,6 +6,8 @@ import { MessageService } from 'primeng/api';
 
 import { routes } from './app.routes';
 import { definePreset } from '@primeuix/themes';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { soualAuthInterceptor } from '@core/interceptors/soual-auth/soual-auth.interceptor';
 
 const SoualPreset = definePreset(Aura, {
   semantic: {
@@ -42,6 +44,7 @@ const SoualPreset = definePreset(Aura, {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
+    provideHttpClient(withInterceptors([soualAuthInterceptor])),
     provideRouter(routes, withComponentInputBinding()),
     MessageService,
     providePrimeNG({
