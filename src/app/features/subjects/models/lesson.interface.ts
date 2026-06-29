@@ -1,4 +1,4 @@
-import { LessonSourceSummary } from './lesson-sources.interface';
+import { LessonSourceSummary, LessonSourceWrite } from './lesson-sources.interface';
 
 export interface Lesson {
   id: number;
@@ -18,4 +18,10 @@ export interface LessonSummary {
   sourceCount: number;
   createdAt: string;
   sources: LessonSourceSummary[];
+}
+
+export interface LessonWrite {
+  title: string;
+  description?: string;
+  sources: LessonSourceWrite[];
 }

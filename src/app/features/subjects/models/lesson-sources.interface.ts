@@ -21,3 +21,10 @@ export interface LessonSourceSummary {
 export type LessonSourceDto = Omit<LessonSource, 'id'>;
 
 export type LessonSourcePatchDto = Partial<LessonSourceDto>;
+
+export interface LessonSourceWrite {
+  source_file: string;
+  startPage?: number;
+  endPage?: number;
+  order?: number;
+}
