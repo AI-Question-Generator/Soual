@@ -8,6 +8,6 @@ export interface RegisterCredentials {
   email: string;
   password: string;
   password2: string;
-  firstName?: string;
-  lastName?: string;
+  first_name?: string;
+  last_name?: string;
 }

@@ -51,7 +51,7 @@ export class AuthService {
   private initializeAuth() {
     const token = this._localStorage.getItem<string>(this.TOKEN_KEY);
     if (token) {
-      this.currentUser.set(null); // TODO: decode JWT and populate AuthUser
+      this.currentUser.set(null);
     }
   }
 
@@ -65,6 +65,14 @@ export class AuthService {
     return this._httpClient.post<RegisterResponse>(`${this.API}/register/`, credentials, {
       context: new HttpContext().set(SKIP_AUTH_CTX, true),
     });
+  }
+
+  getProfile() {
+    return this._httpClient.get<AuthUser>(`${this.API}/profile/`);
+  }
+
+  patchProfile(data: Partial<Pick<AuthUser, 'first_name' | 'last_name' | 'email'>>) {
+    return this._httpClient.patch<AuthUser>(`${this.API}/profile/`, data);
   }
 
   /**

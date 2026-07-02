@@ -91,8 +91,8 @@ export class RegisterComponent {
         email: payload.email,
         password: payload.password,
         password2: payload.password,
-        firstName: payload.firstName,
-        lastName: payload.lastName,
+        first_name: payload.firstName,
+        last_name: payload.lastName,
       })
       .subscribe({
         next: () => {
