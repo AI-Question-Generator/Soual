@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
-import { Lesson } from '@feature/subjects/models';
+import { LessonSummary } from '@feature/subjects/models';
 import { LessonSelectionService } from '@feature/subjects/services/lesson-selection.service';
 
 @Component({
@@ -29,7 +29,7 @@ import { LessonSelectionService } from '@feature/subjects/services/lesson-select
   `,
 })
 export class LessonRowComponent {
-  lesson = input.required<Lesson>();
+  lesson = input.required<LessonSummary>();
 
   private readonly selectionService = inject(LessonSelectionService);
   protected readonly selected = computed(() => this.selectionService.isSelected(this.lesson().id));
