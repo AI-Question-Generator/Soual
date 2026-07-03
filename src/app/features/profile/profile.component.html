@@ -1,0 +1,111 @@
+<soual-navbar />
+
+<main class="container py-10 lg:py-16">
+  <div class="max-w-3xl mx-auto flex flex-col gap-6">
+    <!-- Page heading -->
+    <div>
+      <h1 class="text-2xl lg:text-3xl font-bold text-slate-900">الملف الشخصي</h1>
+      <p class="text-slate-500 mt-1">حدّث بياناتك الشخصية وتفاصيل حسابك.</p>
+    </div>
+
+    <form novalidate class="flex flex-col gap-6" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="border border-slate-200 rounded-lg overflow-hidden">
+        <!-- Card header: avatar + identity -->
+        <div class="px-6 py-4 border-b border-slate-200 flex items-center gap-4">
+          <p-avatar size="large" shape="circle" [label]="initials" />
+          <div class="flex flex-col min-w-0">
+            <h2 class="text-base font-bold text-slate-900 m-0 truncate">{{ user()?.username }}</h2>
+            <span class="text-sm text-slate-500 truncate">{{ user()?.email }}</span>
+          </div>
+        </div>
+
+        <!-- Card body: editable fields -->
+        <div class="px-6 py-6 flex flex-col gap-6">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <!-- First name -->
+            <div class="flex flex-col gap-2">
+              <label for="first_name" class="font-medium text-slate-700">الاسم الأول</label>
+              <input
+                pInputText
+                id="first_name"
+                type="text"
+                formControlName="first_name"
+                autocomplete="given-name"
+                placeholder="أدخل الاسم الأول"
+                class="w-full"
+              />
+              @if (isFieldInvalid('first_name')) {
+                <p-message variant="simple" size="small" severity="error">
+                  الاسم الأول يجب ألا يتجاوز 50 حرفًا
+                </p-message>
+              }
+            </div>
+
+            <!-- Last name -->
+            <div class="flex flex-col gap-2">
+              <label for="last_name" class="font-medium text-slate-700">الاسم الأخير</label>
+              <input
+                pInputText
+                id="last_name"
+                type="text"
+                formControlName="last_name"
+                autocomplete="family-name"
+                placeholder="أدخل الاسم الأخير"
+                class="w-full"
+              />
+              @if (isFieldInvalid('last_name')) {
+                <p-message variant="simple" size="small" severity="error">
+                  الاسم الأخير يجب ألا يتجاوز 50 حرفًا
+                </p-message>
+              }
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="flex flex-col gap-2">
+            <label for="email" class="font-medium text-slate-700">
+              البريد الإلكتروني <span class="text-red-500">*</span>
+            </label>
+            <input
+              pInputText
+              id="email"
+              type="email"
+              formControlName="email"
+              autocomplete="email"
+              dir="ltr"
+              placeholder="name@example.com"
+              class="w-full text-right"
+            />
+            @if (isFieldInvalid('email')) {
+              <p-message variant="simple" size="small" severity="error">
+                @if (form.controls.email.errors?.['required']) {
+                  البريد الإلكتروني مطلوب
+                } @else if (form.controls.email.errors?.['email']) {
+                  البريد الإلكتروني غير صالح
+                }
+              </p-message>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex justify-center gap-3">
+        <p-button
+          type="button"
+          label="إلغاء"
+          severity="secondary"
+          [outlined]="true"
+          [disabled]="form.pristine"
+          (onClick)="onCancel()"
+        />
+        <p-button
+          type="submit"
+          label="حفظ التغييرات"
+          [loading]="isSaving()"
+          [disabled]="form.invalid || form.pristine"
+        />
+      </div>
+    </form>
+  </div>
+</main>
