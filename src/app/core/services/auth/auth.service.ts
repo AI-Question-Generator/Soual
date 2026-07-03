@@ -31,10 +31,6 @@ export class AuthService {
   private _isTokenRefreshing = signal(false);
   isTokenRefreshing = this._isTokenRefreshing.asReadonly();
 
-  constructor() {
-    this.initializeAuth();
-  }
-
   private _tokenRefresh$ = new Subject<void>();
   get tokenRefresh$() {
     return this._tokenRefresh$.asObservable();
@@ -52,7 +48,7 @@ export class AuthService {
     const token = this._localStorage.getItem<string>(this.TOKEN_KEY);
     if (token) {
       this.getProfile().subscribe({
-        error: () => this.clearAuthenticatedUser(),
+        error: (err) => console.error('Failed to hydrate user on startup:', err),
       });
     }
   }
@@ -93,7 +89,7 @@ export class AuthService {
     this._isTokenRefreshing.set(true);
     return this._httpClient
       .post<LoginResponse>(
-        `${this.API}/token/refresh`,
+        `${this.API}/token/refresh/`,
         {},
         {
           headers: {

@@ -1,4 +1,9 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import {
+  ApplicationConfig,
+  inject,
+  provideAppInitializer,
+  provideBrowserGlobalErrorListeners,
+} from '@angular/core';
 import { providePrimeNG } from 'primeng/config';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import Aura from '@primeuix/themes/aura';
@@ -7,6 +12,8 @@ import { routes } from './app.routes';
 import { definePreset } from '@primeuix/themes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { soualAuthInterceptor } from '@core/interceptors';
+import { AuthService } from '@core/services/auth/auth.service';
+import { catchError, of } from 'rxjs';
 
 const SoualPreset = definePreset(Aura, {
   semantic: {
@@ -42,6 +49,15 @@ const SoualPreset = definePreset(Aura, {
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideAppInitializer(() => {
+      const auth = inject(AuthService);
+      if (auth.jwtAccessToken) {
+        auth
+          .getProfile()
+          .pipe(catchError(() => of(null)))
+          .subscribe();
+      }
+    }),
     provideBrowserGlobalErrorListeners(),
     provideHttpClient(withInterceptors([soualAuthInterceptor])),
     provideRouter(routes, withComponentInputBinding()),
