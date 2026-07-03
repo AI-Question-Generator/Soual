@@ -73,7 +73,7 @@ export class AuthService {
 
   editProfile(data: Partial<Pick<AuthUser, 'first_name' | 'last_name' | 'email'>>) {
     return this._httpClient
-      .put<AuthUser>(`${this.API}/profile/`, data)
+      .put<AuthUser>(`${this.API}/profile/update/`, data)
       .pipe(tap((user) => this.currentUser.set(user)));
   }
 
