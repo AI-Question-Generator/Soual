@@ -6,6 +6,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { FloatLabel } from 'primeng/floatlabel';
+import { catchError, of, switchMap, tap } from 'rxjs';
 import { AuthService } from '@core/services/auth/auth.service';
 import { ToastService } from '@shared/services';
 
@@ -56,18 +57,25 @@ export class LoginComponent {
 
     this.isLoading.set(true);
 
-    this.authService.login(payload).subscribe({
-      next: (response) => {
-        this.isLoading.set(false);
-        this.authService.setAuthenticatedUser(response);
-        this.toast.success('تم تسجيل الدخول بنجاح', 'مرحباً بك في سؤال!');
-        this.router.navigate(['/']);
-      },
-      error: (error) => {
-        this.isLoading.set(false);
-        console.error('Login error:', error);
-        this.errorMessage.set('Invalid username or password.');
-      },
-    });
+    this.authService
+      .login(payload)
+      .pipe(
+        tap((response) => {
+          this.authService.setAuthenticatedUser(response);
+        }),
+        switchMap(() => this.authService.loadProfile().pipe(catchError(() => of(null)))),
+      )
+      .subscribe({
+        next: () => {
+          this.isLoading.set(false);
+          this.toast.success('تم تسجيل الدخول بنجاح', 'مرحباً بك في سؤال!');
+          this.router.navigate(['/']);
+        },
+        error: (error) => {
+          this.isLoading.set(false);
+          console.error('Login error:', error);
+          this.errorMessage.set('اسم المستخدم أو كلمة المرور غير صحيحة');
+        },
+      });
   }
 }
