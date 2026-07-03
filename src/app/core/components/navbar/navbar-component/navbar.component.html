@@ -7,6 +7,7 @@
   <!-- Navigation Links -->
   <div class="hidden md:flex items-center gap-6 lg:gap-8 text-slate-600 font-medium">
     <a routerLink="/" class="hover:text-main-600 transition-colors">الرئيسية</a>
+    <a routerLink="/subjects" class="hover:text-main-600 transition-colors">المواد</a>
     <a routerLink="/features" class="hover:text-main-600 transition-colors">المميزات</a>
     <a routerLink="/pricing" class="hover:text-main-600 transition-colors">الأسعار</a>
     <a routerLink="/contact" class="hover:text-main-600 transition-colors">اتصل بنا</a>
@@ -68,6 +69,15 @@
       >
         <i class="pi pi-home text-lg group-hover:scale-110 transition-transform"></i>
         <span class="text-lg">الرئيسية</span>
+      </a>
+
+      <a
+        routerLink="/subjects"
+        class="flex items-center gap-4 p-3 rounded-xl transition-all duration-200 hover:bg-slate-50 text-slate-600 hover:text-slate-900 group"
+        (click)="menuOpen = false"
+      >
+        <i class="pi pi-book text-lg group-hover:scale-110 transition-transform"></i>
+        <span class="text-lg">المواد</span>
       </a>
 
       <a

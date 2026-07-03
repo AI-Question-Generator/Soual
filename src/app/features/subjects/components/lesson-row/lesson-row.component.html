@@ -1,0 +1,14 @@
+<div
+  class="flex items-center gap-3 rounded-lg border px-3 py-2.5 cursor-pointer transition-colors"
+  [class.bg-main-50]="selected()"
+  [class.border-main-300]="selected()"
+  [class.bg-slate-50]="!selected()"
+  [class.border-slate-200]="!selected()"
+  (click)="toggle()"
+>
+  <p-checkbox [ngModel]="selected()" [binary]="true" [readonly]="true" />
+
+  <span class="flex-1 text-sm text-slate-700 leading-snug">
+    {{ lesson().name }}
+  </span>
+</div>
