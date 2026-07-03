@@ -4,20 +4,12 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { AvatarModule } from 'primeng/avatar';
-import { NavbarComponent } from '@core/components';
 import { AuthService } from '@core/services/auth/auth.service';
 import { ToastService } from '@shared/services';
 
 @Component({
   selector: 'soual-profile',
-  imports: [
-    ReactiveFormsModule,
-    NavbarComponent,
-    ButtonModule,
-    InputTextModule,
-    MessageModule,
-    AvatarModule,
-  ],
+  imports: [ReactiveFormsModule, ButtonModule, InputTextModule, MessageModule, AvatarModule],
   templateUrl: './profile.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block min-h-screen' },
