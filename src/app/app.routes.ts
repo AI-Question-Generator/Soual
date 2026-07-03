@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from '@core/guards';
+import { subjectRoutes } from '@feature/subjects/subjects.routes';
 
 export const routes: Routes = [
   {
@@ -17,6 +18,7 @@ export const routes: Routes = [
         loadComponent: () =>
           import('@feature/profile/profile.component').then((m) => m.ProfileComponent),
       },
+      ...subjectRoutes,
     ],
   },
   {
