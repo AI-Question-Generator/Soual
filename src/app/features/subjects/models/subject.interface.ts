@@ -1,4 +1,3 @@
-import type { Unit } from './unit.interface';
 import type { Project } from './project.interface';
 
 export type SubjectName =
@@ -18,7 +17,6 @@ export interface Subject {
 export interface SubjectDetail {
   slug: SubjectName;
   name: string;
-  units: Unit[];
   projects: Project[];
 }
 

@@ -29,12 +29,6 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
         </div>
         <div class="flex flex-col items-center">
           <span class="text-2xl font-bold leading-none">
-            {{ unitCount() }}
-          </span>
-          <span class="mt-2 text-[11px] font-semibold tracking-wider text-white/70">UNITS</span>
-        </div>
-        <div class="flex flex-col items-center">
-          <span class="text-2xl font-bold leading-none">
             {{ totalLessons() }}
           </span>
           <span class="mt-2 text-[11px] font-semibold tracking-wider text-white/70">LESSONS</span>
@@ -46,6 +40,5 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 export class IdentityTileComponent {
   subjectName = input.required<string>();
   projectCount = input.required<string>();
-  unitCount = input.required<string>();
   totalLessons = input.required<string>();
 }
