@@ -4,10 +4,15 @@ import { Router } from '@angular/router';
 import { SKIP_AUTH_CTX } from '@core/interceptors';
 import { environment } from '../../../../environments/environment';
 import { LocalStorageService } from '../local-storage.service';
-import { AuthUser, LoginCredentials, RegisterCredentials, RegisterResponse } from '@core/models';
+import {
+  AuthUser,
+  EditUserResponse,
+  LoginCredentials,
+  RegisterCredentials,
+  RegisterResponse,
+} from '@core/models';
 import { Subject } from 'rxjs/internal/Subject';
 import { retry, tap, finalize, throwError } from 'rxjs';
-import { EditUserResponse } from '@core/models/edit-user-response.model';
 
 interface LoginResponse {
   refresh: string;
