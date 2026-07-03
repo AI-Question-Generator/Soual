@@ -7,6 +7,7 @@ import { LocalStorageService } from '../local-storage.service';
 import { AuthUser, LoginCredentials, RegisterCredentials, RegisterResponse } from '@core/models';
 import { Subject } from 'rxjs/internal/Subject';
 import { retry, tap, finalize, throwError } from 'rxjs';
+import { EditUserResponse } from '@core/models/edit-user-response.model';
 
 interface LoginResponse {
   refresh: string;
@@ -44,15 +45,6 @@ export class AuthService {
     return this._localStorage.getItem<string>(this.REFRESH_TOKEN_KEY);
   }
 
-  private initializeAuth() {
-    const token = this._localStorage.getItem<string>(this.TOKEN_KEY);
-    if (token) {
-      this.getProfile().subscribe({
-        error: (err) => console.error('Failed to hydrate user on startup:', err),
-      });
-    }
-  }
-
   login(credentials: LoginCredentials) {
     return this._httpClient.post<LoginResponse>(`${this.API}/login/`, credentials, {
       context: new HttpContext().set(SKIP_AUTH_CTX, true),
@@ -73,8 +65,14 @@ export class AuthService {
 
   editProfile(data: Partial<Pick<AuthUser, 'first_name' | 'last_name' | 'email'>>) {
     return this._httpClient
-      .put<AuthUser>(`${this.API}/profile/update/`, data)
-      .pipe(tap((user) => this.currentUser.set(user)));
+      .put<EditUserResponse>(`${this.API}/profile/update/`, data)
+      .pipe(
+        tap((response) =>
+          this.currentUser.update((current) =>
+            current ? { ...current, ...response.user } : current,
+          ),
+        ),
+      );
   }
 
   /**

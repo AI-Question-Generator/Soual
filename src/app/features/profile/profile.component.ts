@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+  signal,
+  untracked,
+} from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -14,7 +21,7 @@ import { ToastService } from '@shared/services';
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block min-h-screen' },
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent {
   private readonly authService = inject(AuthService);
   private readonly fb = inject(FormBuilder);
   private readonly toast = inject(ToastService);
@@ -28,15 +35,17 @@ export class ProfileComponent implements OnInit {
     email: ['', [Validators.required, Validators.email]],
   });
 
-  ngOnInit() {
-    const user = this.user();
-    if (user) {
-      this.form.setValue({
-        first_name: user.first_name ?? '',
-        last_name: user.last_name ?? '',
-        email: user.email ?? '',
+  constructor() {
+    effect(() => {
+      const user = this.user();
+      untracked(() => {
+        this.form.patchValue({
+          first_name: user?.first_name ?? '',
+          last_name: user?.last_name ?? '',
+          email: user?.email ?? '',
+        });
       });
-    }
+    });
   }
 
   isFieldInvalid(fieldName: string) {
@@ -60,7 +69,7 @@ export class ProfileComponent implements OnInit {
       next: () => {
         this.isSaving.set(false);
         this.form.markAsPristine();
-        this.toast.success('تم تحديث الملف الشخصي بنجاح');
+        this.toast.success('تم تحديث الملف الشخصي', 'تم حفظ التغييرات بنجاح');
       },
       error: (error) => {
         this.isSaving.set(false);
