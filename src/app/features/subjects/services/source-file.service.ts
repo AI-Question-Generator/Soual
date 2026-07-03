@@ -1,12 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../../environments/environment';
-import {
-  SourceFile,
-  SourceFileDto,
-  SourceFilePatchDto,
-  SourceFileResponse,
-} from '@feature/subjects/models/source-file.interface';
+import { environment } from '@env/environment';
+import { SourceFileDto, SourceFileResponse } from '@feature/subjects/models/source-file.interface';
 
 @Injectable({ providedIn: 'root' })
 export class SourceFileService {
@@ -22,15 +17,7 @@ export class SourceFileService {
   }
 
   uploadSourceFile(payload: SourceFileDto) {
-    return this._http.post<SourceFile>(`${this.API}/`, payload);
-  }
-
-  editSourceFile(id: string, payload: SourceFileDto) {
-    return this._http.put<SourceFile>(`${this.API}/${id}/`, payload);
-  }
-
-  patchSourceFile(id: string, payload: SourceFilePatchDto) {
-    return this._http.patch<SourceFile>(`${this.API}/${id}/`, payload);
+    return this._http.post<SourceFileResponse>(`${this.API}/`, payload);
   }
 
   deleteSourceFile(id: string) {
