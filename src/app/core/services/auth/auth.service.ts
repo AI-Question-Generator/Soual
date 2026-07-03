@@ -51,7 +51,9 @@ export class AuthService {
   private initializeAuth() {
     const token = this._localStorage.getItem<string>(this.TOKEN_KEY);
     if (token) {
-      this.currentUser.set(null);
+      this.getProfile().subscribe({
+        error: () => this.clearAuthenticatedUser(),
+      });
     }
   }
 
@@ -68,11 +70,15 @@ export class AuthService {
   }
 
   getProfile() {
-    return this._httpClient.get<AuthUser>(`${this.API}/profile/`);
+    return this._httpClient
+      .get<AuthUser>(`${this.API}/profile/`)
+      .pipe(tap((user) => this.currentUser.set(user)));
   }
 
-  patchProfile(data: Partial<Pick<AuthUser, 'first_name' | 'last_name' | 'email'>>) {
-    return this._httpClient.patch<AuthUser>(`${this.API}/profile/`, data);
+  editProfile(data: Partial<Pick<AuthUser, 'first_name' | 'last_name' | 'email'>>) {
+    return this._httpClient
+      .put<AuthUser>(`${this.API}/profile/`, data)
+      .pipe(tap((user) => this.currentUser.set(user)));
   }
 
   /**
@@ -97,7 +103,7 @@ export class AuthService {
         },
       )
       .pipe(
-        tap((res) => this.setAuthenticatedUser(res)),
+        tap((res) => this.storeAuthTokens(res)),
         finalize(() => {
           this._isTokenRefreshing.set(false);
           this._tokenRefresh$.next();
@@ -105,17 +111,12 @@ export class AuthService {
       );
   }
 
-  /**
-   * Set authenticated user in Local Storage and auth state
-   * @param data - The response data from the login request
-   */
-  setAuthenticatedUser(data: LoginResponse) {
+  storeAuthTokens(data: LoginResponse) {
     try {
       this._localStorage.setItem(this.REFRESH_TOKEN_KEY, data.refresh);
       this._localStorage.setItem(this.TOKEN_KEY, data.access);
-      this.currentUser.set(null);
     } catch (error) {
-      console.error('Error decoding JWT token:', error);
+      console.error('Failed to persist auth tokens:', error);
     }
   }
 
