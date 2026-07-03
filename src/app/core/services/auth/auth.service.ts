@@ -4,7 +4,13 @@ import { Router } from '@angular/router';
 import { SKIP_AUTH_CTX } from '@core/interceptors';
 import { environment } from '../../../../environments/environment';
 import { LocalStorageService } from '../local-storage.service';
-import { AuthUser, LoginCredentials, RegisterCredentials, RegisterResponse } from '@core/models';
+import {
+  AuthUser,
+  EditUserResponse,
+  LoginCredentials,
+  RegisterCredentials,
+  RegisterResponse,
+} from '@core/models';
 import { Subject } from 'rxjs/internal/Subject';
 import { retry, tap, finalize, throwError } from 'rxjs';
 
@@ -31,10 +37,6 @@ export class AuthService {
   private _isTokenRefreshing = signal(false);
   isTokenRefreshing = this._isTokenRefreshing.asReadonly();
 
-  constructor() {
-    this.initializeAuth();
-  }
-
   private _tokenRefresh$ = new Subject<void>();
   get tokenRefresh$() {
     return this._tokenRefresh$.asObservable();
@@ -46,13 +48,6 @@ export class AuthService {
 
   get jwtRefreshToken() {
     return this._localStorage.getItem<string>(this.REFRESH_TOKEN_KEY);
-  }
-
-  private initializeAuth() {
-    const token = this._localStorage.getItem<string>(this.TOKEN_KEY);
-    if (token) {
-      this.currentUser.set(null); // TODO: decode JWT and populate AuthUser
-    }
   }
 
   login(credentials: LoginCredentials) {
@@ -67,6 +62,24 @@ export class AuthService {
     });
   }
 
+  getProfile() {
+    return this._httpClient
+      .get<AuthUser>(`${this.API}/profile/`)
+      .pipe(tap((user) => this.currentUser.set(user)));
+  }
+
+  editProfile(data: Partial<Pick<AuthUser, 'first_name' | 'last_name' | 'email'>>) {
+    return this._httpClient
+      .put<EditUserResponse>(`${this.API}/profile/update/`, data)
+      .pipe(
+        tap((response) =>
+          this.currentUser.update((current) =>
+            current ? { ...current, ...response.user } : current,
+          ),
+        ),
+      );
+  }
+
   /**
    * Refresh Expired JWT Token using pleny refresh token
    * @returns JWT Token new access token
@@ -79,7 +92,7 @@ export class AuthService {
     this._isTokenRefreshing.set(true);
     return this._httpClient
       .post<LoginResponse>(
-        `${this.API}/token/refresh`,
+        `${this.API}/token/refresh/`,
         {},
         {
           headers: {
@@ -89,7 +102,7 @@ export class AuthService {
         },
       )
       .pipe(
-        tap((res) => this.setAuthenticatedUser(res)),
+        tap((res) => this.storeAuthTokens(res)),
         finalize(() => {
           this._isTokenRefreshing.set(false);
           this._tokenRefresh$.next();
@@ -97,17 +110,12 @@ export class AuthService {
       );
   }
 
-  /**
-   * Set authenticated user in Local Storage and auth state
-   * @param data - The response data from the login request
-   */
-  setAuthenticatedUser(data: LoginResponse) {
+  storeAuthTokens(data: LoginResponse) {
     try {
       this._localStorage.setItem(this.REFRESH_TOKEN_KEY, data.refresh);
       this._localStorage.setItem(this.TOKEN_KEY, data.access);
-      this.currentUser.set(null);
     } catch (error) {
-      console.error('Error decoding JWT token:', error);
+      console.error('Failed to persist auth tokens:', error);
     }
   }
 

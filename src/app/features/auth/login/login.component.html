@@ -49,7 +49,7 @@
             type="text"
             formControlName="username"
             autocomplete="username"
-            class="w-full bg-slate-50 border-slate-200 focus:border-main-500 rounded-lg py-3"
+            class="w-full"
             [class.ng-invalid]="invalidUsername"
             [class.ng-dirty]="invalidUsername"
           />
@@ -75,7 +75,7 @@
             inputId="password"
             formControlName="password"
             class="w-full"
-            inputStyleClass="w-full bg-slate-50 border-slate-200 focus:border-main-500 rounded-lg py-3"
+            inputStyleClass="w-full"
             [feedback]="false"
             [toggleMask]="true"
             [class.ng-invalid]="invalidPassword"
@@ -118,7 +118,8 @@
       <p-button
         type="submit"
         label="تسجيل الدخول"
-        styleClass="w-full py-3.5 text-lg font-bold shadow-md shadow-main-200 hover:shadow-main-300 transition-all rounded-xl"
+        size="large"
+        styleClass="w-full"
         [loading]="isLoading()"
       />
     </form>
