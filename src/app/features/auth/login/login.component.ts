@@ -61,9 +61,9 @@ export class LoginComponent {
       .login(payload)
       .pipe(
         tap((response) => {
-          this.authService.setAuthenticatedUser(response);
+          this.authService.storeAuthTokens(response);
         }),
-        switchMap(() => this.authService.loadProfile().pipe(catchError(() => of(null)))),
+        switchMap(() => this.authService.getProfile().pipe(catchError(() => of(null)))),
       )
       .subscribe({
         next: () => {
