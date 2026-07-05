@@ -8,7 +8,7 @@ import { Project } from '@feature/subjects/models';
   host: { class: 'block' },
   imports: [ButtonModule],
   template: `
-    <section class="rounded-2xl bg-white/70 backdrop-blur-sm border border-slate-200 shadow-sm p-4">
+    <section class="rounded-2xl bg-white border border-slate-200 shadow-sm p-4">
       <header class="flex items-center justify-between mb-4">
         <h3 class="text-base font-bold text-slate-800">المشاريع</h3>
         <p-button icon="pi pi-plus" size="small" ariaLabel="مشروع جديد" [rounded]="true" />

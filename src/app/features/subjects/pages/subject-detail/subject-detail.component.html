@@ -88,7 +88,7 @@
           <p-accordion [value]="openUnits()" [multiple]="true">
             @for (unit of unitGroups(); track unit.unitNumber) {
               <p-accordion-panel
-                class="block rounded-xl border border-slate-200 overflow-hidden not-last:mb-3"
+                class="block rounded-xl bg-white border border-slate-200 overflow-hidden not-last:mb-3"
                 [value]="unit.unitNumber"
               >
                 <p-accordion-header>
