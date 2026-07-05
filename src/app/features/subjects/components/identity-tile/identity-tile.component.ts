@@ -59,6 +59,6 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 })
 export class IdentityTileComponent {
   subjectName = input.required<string>();
-  projectCount = input.required<string>();
-  totalLessons = input.required<string>();
+  projectCount = input.required<number>();
+  totalLessons = input.required<number>();
 }
