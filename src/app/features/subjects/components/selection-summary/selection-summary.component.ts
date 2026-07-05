@@ -9,7 +9,7 @@ import { LessonSelectionService } from '@feature/subjects/services/lesson-select
   host: { class: 'block' },
   imports: [ButtonModule],
   template: `
-    <section class="rounded-2xl border border-slate-200 shadow-sm p-3">
+    <section class="rounded-2xl bg-white border border-slate-200 shadow-sm p-3">
       <header class="flex items-center justify-between gap-2 mb-3">
         <div class="flex items-center gap-2">
           <h3 class="text-base font-bold text-slate-800">الدروس المختارة</h3>

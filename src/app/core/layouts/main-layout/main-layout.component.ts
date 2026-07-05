@@ -5,7 +5,7 @@ import { NavbarComponent } from '@core/components';
 @Component({
   selector: 'soual-main-layout',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'block min-h-screen' },
+  host: { class: 'block min-h-screen bg-slate-50' },
   imports: [NavbarComponent, RouterOutlet],
   template: `
     <soual-navbar />
