@@ -54,7 +54,6 @@ export class SubjectDetailComponent implements OnInit {
 
   protected readonly lessons = computed(() => this.selectedProject()?.lessons ?? []);
   protected readonly unitGroups = computed(() => groupLessonsByUnit(this.lessons()));
-  /** Only the first unit starts expanded; PrimeNG owns the open/close state afterwards. */
   protected readonly openUnits = computed(() => {
     const first = this.unitGroups()[0];
     return first ? [first.unitNumber] : [];
