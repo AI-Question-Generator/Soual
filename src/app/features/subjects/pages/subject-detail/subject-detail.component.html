@@ -12,10 +12,50 @@
     </div>
   } @else if (selectedProject(); as project) {
     <div class="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6 items-start">
-      <soual-project-rail
-        [projects]="projects() ?? []"
-        (selectedProjectId)="selectProject($event)"
-      />
+      <aside class="flex flex-col gap-4 lg:sticky lg:top-6">
+        <soual-project-rail
+          [projects]="projects() ?? []"
+          (selectedProjectId)="selectProject($event)"
+        />
+
+        <soual-selection-summary [lessons]="selectedLessons()" />
+
+        <section class="rounded-2xl bg-white border border-slate-200 shadow-sm p-4">
+          <h3 class="text-sm font-bold text-slate-800 mb-3">كيف يعمل التوليد؟</h3>
+          <ol class="flex flex-col gap-3">
+            <li class="flex items-start gap-2.5">
+              <span
+                class="flex-center size-6 shrink-0 rounded-full bg-main-50 text-main-700 text-xs font-bold"
+              >
+                1
+              </span>
+              <p class="text-xs text-slate-500 leading-relaxed pt-1">
+                اختر الدروس التي تريد التدرب عليها من القائمة
+              </p>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <span
+                class="flex-center size-6 shrink-0 rounded-full bg-main-50 text-main-700 text-xs font-bold"
+              >
+                2
+              </span>
+              <p class="text-xs text-slate-500 leading-relaxed pt-1">
+                حدد نوع الأسئلة وعددها لكل درس
+              </p>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <span
+                class="flex-center size-6 shrink-0 rounded-full bg-main-50 text-main-700 text-xs font-bold"
+              >
+                3
+              </span>
+              <p class="text-xs text-slate-500 leading-relaxed pt-1">
+                استلم أسئلة متوافقة مع المنهج وابدأ التدريب
+              </p>
+            </li>
+          </ol>
+        </section>
+      </aside>
 
       <section class="flex flex-col gap-4">
         <header class="flex items-center justify-between gap-3 px-1">

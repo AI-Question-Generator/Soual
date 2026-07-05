@@ -15,6 +15,7 @@ import {
   IdentityTileComponent,
   LessonUnitComponent,
   ProjectRailComponent,
+  SelectionSummaryComponent,
 } from '@feature/subjects/components';
 import { LessonSelectionService, ProjectService } from '@feature/subjects/services';
 import { groupLessonsByUnit } from '@feature/subjects/utils/group-lessons.util';
@@ -32,6 +33,7 @@ import { ToastService } from '@shared/services';
     IdentityTileComponent,
     ProjectRailComponent,
     LessonUnitComponent,
+    SelectionSummaryComponent,
     GenerateBarComponent,
     GenerationConfigDialogComponent,
     AccordionModule,
