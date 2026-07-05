@@ -7,15 +7,17 @@ import {
   signal,
 } from '@angular/core';
 import { Router } from '@angular/router';
+import { AccordionModule } from 'primeng/accordion';
 import { ProgressBarModule } from 'primeng/progressbar';
 import type { Project } from '@feature/subjects/models';
 import {
   GenerateBarComponent,
   IdentityTileComponent,
-  LessonRowComponent,
+  LessonUnitComponent,
   ProjectRailComponent,
 } from '@feature/subjects/components';
 import { LessonSelectionService, ProjectService } from '@feature/subjects/services';
+import { groupLessonsByUnit } from '@feature/subjects/utils/group-lessons.util';
 import { QuestionGenerationService } from '@feature/generation/services';
 import type { LessonGenerationConfig } from '@feature/generation/models';
 import { GenerationConfigDialogComponent } from '@feature/generation/components';
@@ -29,9 +31,10 @@ import { ToastService } from '@shared/services';
   imports: [
     IdentityTileComponent,
     ProjectRailComponent,
-    LessonRowComponent,
+    LessonUnitComponent,
     GenerateBarComponent,
     GenerationConfigDialogComponent,
+    AccordionModule,
     ProgressBarModule,
   ],
   templateUrl: './subject-detail.component.html',
@@ -50,6 +53,12 @@ export class SubjectDetailComponent implements OnInit {
   protected readonly isGenerating = signal(false);
 
   protected readonly lessons = computed(() => this.selectedProject()?.lessons ?? []);
+  protected readonly unitGroups = computed(() => groupLessonsByUnit(this.lessons()));
+  /** Only the first unit starts expanded; PrimeNG owns the open/close state afterwards. */
+  protected readonly openUnits = computed(() => {
+    const first = this.unitGroups()[0];
+    return first ? [first.unitNumber] : [];
+  });
   protected readonly totalLessons = computed(
     () => this.projects()?.reduce((total, project) => total + project.lessons.length, 0) ?? 0,
   );
