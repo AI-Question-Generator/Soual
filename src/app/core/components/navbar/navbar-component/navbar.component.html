@@ -25,7 +25,7 @@
         <span class="font-medium text-slate-700 max-w-40 truncate">{{ displayName() }}</span>
         <i class="pi pi-chevron-down text-xs text-slate-400"></i>
       </button>
-      <p-menu #userMenu appendTo="body" [model]="userMenuItems" [popup]="true" />
+      <p-menu #userMenu appendTo="body" [model]="userMenuItems" [popup]="true" [pt]="pt" />
     } @else {
       <p-button label="ابدأ الآن مجاناً" icon="pi pi-bolt" />
       <p-button label="تسجيل الدخول" outlined icon="pi pi-sign-in" (click)="navigateToLogin()" />

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { ButtonModule } from 'primeng/button';
 import { DrawerModule } from 'primeng/drawer';
 import { AvatarModule } from 'primeng/avatar';
-import { MenuModule } from 'primeng/menu';
+import { MenuModule, MenuPassThrough } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '@core/services/auth/auth.service';
@@ -74,4 +74,8 @@ export class NavbarComponent {
     this.menuOpen = false;
     this.authService.logout().subscribe();
   }
+
+  readonly pt: MenuPassThrough = {
+    root: 'mt-1',
+  };
 }
