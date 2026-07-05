@@ -42,6 +42,11 @@ export class NavbarComponent {
       icon: 'pi pi-user',
       command: () => this.goToProfile(),
     },
+    {
+      label: 'أسئلتي',
+      icon: 'pi pi-list',
+      command: () => this.goToGenerationRequests(),
+    },
     { separator: true },
     {
       label: 'تسجيل الخروج',
@@ -58,6 +63,11 @@ export class NavbarComponent {
   goToProfile() {
     this.menuOpen = false;
     this.router.navigate(['/user-profile']);
+  }
+
+  goToGenerationRequests() {
+    this.menuOpen = false;
+    this.router.navigate(['/generation/requests']);
   }
 
   logout() {
