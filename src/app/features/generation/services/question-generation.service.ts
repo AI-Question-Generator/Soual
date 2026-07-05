@@ -31,7 +31,7 @@ export class QuestionGenerationService {
   }
 
   createRequest(payload: GenerationRequest) {
-    return this._http.post<GenerationRequest>(`${this.API}/generation-requests/`, payload);
+    return this._http.post<GenerationRequestResponse>(`${this.API}/generation-requests/`, payload);
   }
 
   getRequestById(id: string) {
