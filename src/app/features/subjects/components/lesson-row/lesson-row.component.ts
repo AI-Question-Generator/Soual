@@ -19,4 +19,13 @@ export class LessonRowComponent {
   protected toggle(): void {
     this.selectionService.toggle(this.lesson().id);
   }
+
+  protected readonly cardClasses = computed(
+    () =>
+      `group flex items-center gap-3 rounded-xl border p-2.5 cursor-pointer transition-all duration-150 ${
+        this.selected()
+          ? 'bg-main-50 border-main-300 shadow-sm'
+          : 'bg-white border-slate-200 hover:border-main-200 hover:bg-slate-50'
+      }`,
+  );
 }
