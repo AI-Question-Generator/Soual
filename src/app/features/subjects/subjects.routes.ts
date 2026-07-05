@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { Subjects } from '@feature/subjects/models';
 
 export const subjectRoutes: Routes = [
   {
@@ -10,14 +9,13 @@ export const subjectRoutes: Routes = [
       ),
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'english' },
-      ...Subjects.map((subject) => ({
-        path: subject.slug,
+      {
+        path: 'english',
         loadComponent: () =>
           import('@feature/subjects/pages/subject-detail/subject-detail.component').then(
             (m) => m.SubjectDetailComponent,
           ),
-        data: subject,
-      })),
+      },
     ],
   },
 ];

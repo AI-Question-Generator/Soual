@@ -20,7 +20,6 @@ export interface SubjectDetail {
 }
 
 export const Subjects: Subject[] = [
-  { slug: 'english', name: 'اللغة الانجليزية' },
   { slug: 'arabic', name: 'اللغة العربية' },
   { slug: 'mathematics', name: 'الرياضيات' },
   { slug: 'chemistry', name: 'الكيمياء' },
