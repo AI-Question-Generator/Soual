@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from '@core/guards';
 import { subjectRoutes } from '@feature/subjects/subjects.routes';
+import { generationRoutes } from '@feature/generation/generation.routes';
 
 export const routes: Routes = [
   {
@@ -19,6 +20,7 @@ export const routes: Routes = [
           import('@feature/profile/profile.component').then((m) => m.ProfileComponent),
       },
       ...subjectRoutes,
+      ...generationRoutes,
     ],
   },
   {
