@@ -1,0 +1,54 @@
+<div class="flex flex-col gap-6 pb-32">
+  <soual-identity-tile
+    subjectName="اللغة الانجليزية"
+    [projectCount]="projects()?.length ?? 0"
+    [totalLessons]="totalLessons()"
+  />
+
+  @if (isLoadingProjects()) {
+    <div class="flex flex-col gap-2 py-8">
+      <p-progressbar mode="indeterminate" [style]="{ height: '4px' }" />
+      <span class="text-sm text-slate-500 text-center">جاري تحميل المشاريع.</span>
+    </div>
+  } @else if (selectedProject(); as project) {
+    <div class="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6 items-start">
+      <soual-project-rail
+        [projects]="projects() ?? []"
+        (selectedProjectId)="selectProject($event)"
+      />
+
+      <section class="rounded-2xl bg-white border border-slate-200 shadow-sm p-5">
+        <header class="flex items-center justify-between mb-4">
+          <h3 class="text-base font-bold text-slate-800">{{ project.name }}</h3>
+          <span class="text-xs text-slate-500">{{ lessons().length }} درس</span>
+        </header>
+
+        @if (lessons().length === 0) {
+          <p class="text-sm text-slate-500 text-center py-8">لا توجد دروس في هذا المشروع</p>
+        } @else {
+          <div class="flex flex-col gap-2">
+            @for (lesson of lessons(); track lesson.id) {
+              <soual-lesson-row [lesson]="lesson" />
+            }
+          </div>
+        }
+      </section>
+    </div>
+  } @else {
+    <p class="text-sm text-slate-500 text-center py-12">
+      لا توجد مشاريع بعد — أنشئ مشروعًا وأضف دروسك لبدء توليد الأسئلة
+    </p>
+  }
+</div>
+
+<soual-generation-config-dialog
+  [lessons]="selectedLessons()"
+  [(visible)]="configDialogVisible"
+  (confirmed)="onConfigConfirmed($event)"
+/>
+
+<soual-generate-bar
+  [selectedCount]="selectedCount()"
+  [isLoading]="isGenerating()"
+  (generate)="configDialogVisible.set(true)"
+/>

@@ -1,88 +1,102 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
-import type { SubjectName } from '@feature/subjects/models';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
+import { Router } from '@angular/router';
+import { ProgressBarModule } from 'primeng/progressbar';
+import type { Project } from '@feature/subjects/models';
 import {
   GenerateBarComponent,
   IdentityTileComponent,
   LessonRowComponent,
   ProjectRailComponent,
 } from '@feature/subjects/components';
-import { LessonSelectionService } from '@feature/subjects/services';
+import { LessonSelectionService, ProjectService } from '@feature/subjects/services';
+import { QuestionGenerationService } from '@feature/generation/services';
+import type { LessonGenerationConfig } from '@feature/generation/models';
+import { GenerationConfigDialogComponent } from '@feature/generation/components';
 import { ToastService } from '@shared/services';
-import { mockProjectsFor } from '@feature/subjects/mocks/subject-detail.mock';
 
 @Component({
   selector: 'soual-subject-detail',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'mt-3 block' },
   providers: [LessonSelectionService],
-  imports: [IdentityTileComponent, ProjectRailComponent, LessonRowComponent, GenerateBarComponent],
-  template: `
-    <div class="flex flex-col gap-6 pb-32">
-      <soual-identity-tile
-        [subjectName]="name()"
-        [projectCount]="projectCount().toString()"
-        [totalLessons]="totalLessons().toString()"
-      />
-
-      <div class="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6 items-start">
-        <soual-project-rail [projects]="projects()" (selectedProjectId)="selectProject($event)" />
-
-        <section class="rounded-2xl bg-white border border-slate-200 shadow-sm p-5">
-          <header class="flex items-center justify-between mb-4">
-            <h3 class="text-base font-bold text-slate-800">{{ selectedProject().name }}</h3>
-            <span class="text-xs text-slate-500">{{ lessons().length }} درس</span>
-          </header>
-
-          @if (lessons().length === 0) {
-            <p class="text-sm text-slate-500 text-center py-8">لا توجد دروس في هذا المشروع</p>
-          } @else {
-            <div class="flex flex-col gap-2">
-              @for (lesson of lessons(); track lesson.id) {
-                <soual-lesson-row [lesson]="lesson" />
-              }
-            </div>
-          }
-        </section>
-      </div>
-    </div>
-
-    <soual-generate-bar [selectedCount]="selectedCount()" (generate)="onGenerate()" />
-  `,
+  imports: [
+    IdentityTileComponent,
+    ProjectRailComponent,
+    LessonRowComponent,
+    GenerateBarComponent,
+    GenerationConfigDialogComponent,
+    ProgressBarModule,
+  ],
+  templateUrl: './subject-detail.component.html',
 })
-export class SubjectDetailComponent {
-  name = input.required<string>();
-  slug = input.required<SubjectName>();
-
+export class SubjectDetailComponent implements OnInit {
   private readonly selection = inject(LessonSelectionService);
   private readonly toast = inject(ToastService);
+  private readonly router = inject(Router);
+  private readonly projectService = inject(ProjectService);
+  private readonly generationService = inject(QuestionGenerationService);
 
-  protected readonly projects = computed(() => mockProjectsFor(this.slug()));
-  private readonly _selectedProjectId = signal<string | null>(null);
+  protected readonly projects = signal<Project[] | null>(null);
+  protected readonly isLoadingProjects = signal(false);
+  protected readonly selectedProject = signal<Project | null>(null);
+  protected readonly configDialogVisible = signal(false);
+  protected readonly isGenerating = signal(false);
 
-  protected readonly selectedProject = computed(() => {
-    const projects = this.projects();
-    const id = this._selectedProjectId();
-    return (
-      projects.find((project) => project.id === id) ??
-      projects.find((project) => project.isDefault) ??
-      projects[0]
-    );
-  });
+  protected readonly lessons = computed(() => this.selectedProject()?.lessons ?? []);
+  protected readonly totalLessons = computed(
+    () => this.projects()?.reduce((total, project) => total + project.lessons.length, 0) ?? 0,
+  );
 
-  protected readonly lessons = computed(() => this.selectedProject().lessons);
-  protected readonly projectCount = computed(() => this.projects().length);
-  protected readonly totalLessons = computed(() => {
-    const defaultProject = this.projects().find((project) => project.isDefault);
-    return defaultProject?.lessons.length ?? 0;
-  });
   protected readonly selectedCount = this.selection.count;
+  protected readonly selectedLessons = computed(() =>
+    this.lessons().filter((lesson) => this.selection.isSelected(lesson.id)),
+  );
+
+  ngOnInit(): void {
+    this.isLoadingProjects.set(true);
+    this.projectService.getProjects().subscribe({
+      next: (projects) => {
+        this.isLoadingProjects.set(false);
+        this.projects.set(projects);
+        const defaultProject = projects.find((project) => project.isDefault);
+        this.selectedProject.set(defaultProject ?? projects[0] ?? null);
+      },
+      error: () => {
+        this.isLoadingProjects.set(false);
+        this.toast.error('تعذر تحميل المشاريع', 'حدث خطأ أثناء تحميل مشاريعك');
+      },
+    });
+  }
 
   protected selectProject(id: string): void {
     this.selection.clear();
-    this._selectedProjectId.set(id);
+    const project = this.projects()?.find((p) => p.id === id);
+    this.selectedProject.set(project ?? null);
   }
 
-  protected onGenerate(): void {
-    this.toast.success('جاري توليد الأسئلة', `تم اختيار ${this.selectedCount()} درس`);
+  protected onConfigConfirmed(lessons: LessonGenerationConfig[]): void {
+    const project = this.selectedProject();
+    if (!project || lessons.length === 0) return;
+
+    this.isGenerating.set(true);
+    this.generationService.createRequest({ project: project.id, lessons }).subscribe({
+      next: (response) => {
+        this.isGenerating.set(false);
+        this.selection.clear();
+        this.toast.success('تم إنشاء طلب التوليد', 'جاري توليد الأسئلة الآن');
+        this.router.navigate(['/generation/requests', response.id]);
+      },
+      error: () => {
+        this.isGenerating.set(false);
+        this.toast.error('تعذر إنشاء الطلب', 'حدث خطأ أثناء إنشاء طلب التوليد');
+      },
+    });
   }
 }

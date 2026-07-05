@@ -8,7 +8,7 @@ import { ButtonModule } from 'primeng/button';
   imports: [ButtonModule],
   template: `
     <div
-      class="flex items-center justify-between gap-4 bg-white border-t border-slate-200 shadow-[0_-4px_12px_-2px_rgba(0,0,0,0.08)] p-5"
+      class="flex items-center justify-between gap-4 bg-white border-t border-slate-200 shadow-[0_-4px_12px_-2px_rgba(0,0,0,0.08)] py-5 px-8"
     >
       <div class="flex flex-col gap-2">
         <span class="text-md font-bold text-slate-800 leading-tight">
