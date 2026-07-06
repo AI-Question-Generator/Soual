@@ -23,9 +23,14 @@ function choiceHash(seed: string): number {
       dir="ltr"
       class="rounded-2xl bg-white border border-slate-100 shadow-xs p-5 flex flex-col gap-4"
     >
-      <header class="flex items-start justify-between gap-3">
-        <p class="text-base font-medium text-slate-800 leading-relaxed">
-          {{ index() + 1 }}. {{ question().content }}
+      <header class="flex items-start gap-3">
+        <span
+          class="flex-center size-7 shrink-0 rounded-lg bg-main-50 border border-main-100 text-main-700 font-bold text-sm"
+        >
+          {{ index() + 1 }}
+        </span>
+        <p class="flex-1 text-base font-medium text-slate-800 leading-relaxed">
+          {{ question().content }}
         </p>
         <p-tag severity="secondary" [value]="typeLabel()" />
       </header>

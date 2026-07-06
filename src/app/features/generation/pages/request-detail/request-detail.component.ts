@@ -50,9 +50,21 @@ const POLL_INTERVAL_MS = 5000;
           class="rounded-2xl bg-white border border-slate-200 shadow-sm p-5 flex flex-col gap-4"
         >
           <header class="flex items-center justify-between gap-3 flex-wrap">
-            <div class="flex flex-col gap-1">
+            <div class="flex flex-col gap-2">
               <h2 class="text-lg font-bold text-slate-800">{{ request.projectName }}</h2>
-              <span class="text-xs text-slate-500">{{ formatDate(request.requestedAt) }}</span>
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="text-xs text-slate-500">{{ formatDate(request.requestedAt) }}</span>
+                <span
+                  class="rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-600"
+                >
+                  {{ request.lessonIds?.length ?? 0 }} درس
+                </span>
+                <span
+                  class="rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-600"
+                >
+                  {{ totalRequested() }} سؤال
+                </span>
+              </div>
             </div>
             <soual-request-status-badge [status]="currentStatus()" />
           </header>
@@ -73,12 +85,26 @@ const POLL_INTERVAL_MS = 5000;
 
         @if (!isActive()) {
           @if (questions().length === 0) {
-            <p class="text-sm text-slate-500 text-center py-8">لم يتم توليد أي أسئلة لهذا الطلب</p>
+            <div
+              class="flex-col-center gap-4 rounded-2xl border border-dashed border-slate-200 bg-white py-14 text-center"
+            >
+              <span class="flex-center h-14 w-14 rounded-2xl bg-main-50 text-main-400">
+                <i class="pi pi-inbox text-3xl"></i>
+              </span>
+              <p class="max-w-xs text-sm leading-relaxed text-slate-500">
+                لم يتم توليد أي أسئلة لهذا الطلب
+              </p>
+            </div>
           } @else {
             <section class="flex flex-col gap-4">
-              <h3 class="text-base font-bold text-slate-800">
-                الأسئلة المولدة ({{ questions().length }})
-              </h3>
+              <div class="flex items-center gap-2.5">
+                <h3 class="text-base font-bold text-slate-800">الأسئلة المولدة</h3>
+                <span
+                  class="rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-600"
+                >
+                  {{ questions().length }} سؤال
+                </span>
+              </div>
               @for (question of questions(); track question.id; let i = $index) {
                 <soual-question-card [question]="question" [index]="i" />
               }
@@ -126,6 +152,9 @@ export class RequestDetailComponent {
     () => this.polledStatus()?.errorLog || this.request()?.errorLog || '',
   );
   protected readonly questions = computed(() => this.request()?.generatedQuestions ?? []);
+  protected readonly totalRequested = computed(() =>
+    (this.request()?.questionConfigs ?? []).reduce((sum, config) => sum + config.numQuestions, 0),
+  );
 
   constructor() {
     effect(() => {
