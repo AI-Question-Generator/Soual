@@ -1,0 +1,142 @@
+<div class="flex flex-col gap-6 pb-32">
+  <soual-identity-tile
+    subjectName="اللغة الانجليزية"
+    [projectCount]="projects()?.length ?? 0"
+    [totalLessons]="totalLessons()"
+  />
+
+  @if (isLoadingProjects()) {
+    <div class="flex flex-col gap-2 py-8">
+      <p-progressbar mode="indeterminate" [style]="{ height: '4px' }" />
+      <span class="text-sm text-slate-500 text-center">جاري تحميل المشاريع.</span>
+    </div>
+  } @else if (selectedProject(); as project) {
+    <div class="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6 items-start">
+      <aside class="flex flex-col gap-4 lg:sticky lg:top-6">
+        <soual-project-rail
+          [projects]="projects() ?? []"
+          (selectedProjectId)="selectProject($event)"
+        />
+
+        <soual-selection-summary [lessons]="selectedLessons()" />
+
+        <section class="rounded-2xl bg-white border border-slate-200 shadow-sm p-4">
+          <h3 class="text-sm font-bold text-slate-800 mb-3">كيف يعمل التوليد؟</h3>
+          <ol class="flex flex-col gap-3">
+            <li class="flex items-start gap-2.5">
+              <span
+                class="flex-center size-6 shrink-0 rounded-full bg-main-50 text-main-700 text-xs font-bold"
+              >
+                1
+              </span>
+              <p class="text-xs text-slate-500 leading-relaxed pt-1">
+                اختر الدروس التي تريد التدرب عليها من القائمة
+              </p>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <span
+                class="flex-center size-6 shrink-0 rounded-full bg-main-50 text-main-700 text-xs font-bold"
+              >
+                2
+              </span>
+              <p class="text-xs text-slate-500 leading-relaxed pt-1">
+                حدد نوع الأسئلة وعددها لكل درس
+              </p>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <span
+                class="flex-center size-6 shrink-0 rounded-full bg-main-50 text-main-700 text-xs font-bold"
+              >
+                3
+              </span>
+              <p class="text-xs text-slate-500 leading-relaxed pt-1">
+                استلم أسئلة متوافقة مع المنهج وابدأ التدريب
+              </p>
+            </li>
+          </ol>
+        </section>
+      </aside>
+
+      <section class="flex flex-col gap-4">
+        <header class="flex items-center justify-between gap-3 px-1">
+          <div class="flex items-center gap-2.5">
+            <h3 class="text-lg font-bold text-slate-800">{{ project.name }}</h3>
+            <span class="rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-600">
+              {{ lessons().length }} درس
+            </span>
+          </div>
+          @if (selectedCount() > 0) {
+            <span
+              class="inline-flex items-center gap-1.5 rounded-full bg-main-50 px-2.5 py-1 text-xs font-semibold text-main-700"
+            >
+              <i class="pi pi-check-circle text-[11px]"></i>
+              {{ selectedCount() }} محدد
+            </span>
+          }
+        </header>
+
+        @if (lessons().length === 0) {
+          <div
+            class="flex-col-center gap-3 rounded-2xl border border-dashed border-slate-200 bg-white py-14 text-center"
+          >
+            <span class="flex-center h-12 w-12 rounded-full bg-slate-50 text-slate-300">
+              <i class="pi pi-inbox text-2xl"></i>
+            </span>
+            <p class="text-sm text-slate-500">لا توجد دروس في هذا المشروع بعد</p>
+          </div>
+        } @else {
+          <p-accordion [value]="openUnits()" [multiple]="true">
+            @for (unit of unitGroups(); track unit.unitNumber) {
+              <p-accordion-panel
+                class="block rounded-xl bg-white border border-slate-200 overflow-hidden not-last:mb-3"
+                [value]="unit.unitNumber"
+              >
+                <p-accordion-header>
+                  <div class="flex items-center gap-3 flex-1 min-w-0">
+                    <span
+                      class="flex-center size-8 shrink-0 rounded-lg bg-main-50 border border-main-100 text-main-700 font-extrabold text-sm"
+                    >
+                      {{ unit.unitNumber }}
+                    </span>
+                    <span class="text-sm font-bold text-slate-800"
+                      >الوحدة {{ unit.unitNumber }}</span
+                    >
+                    <span class="text-[11px] font-medium text-slate-400">
+                      {{ unit.lessonCount }} درس
+                    </span>
+                  </div>
+                </p-accordion-header>
+                <p-accordion-content>
+                  <soual-lesson-unit [unit]="unit" />
+                </p-accordion-content>
+              </p-accordion-panel>
+            }
+          </p-accordion>
+        }
+      </section>
+    </div>
+  } @else {
+    <div
+      class="flex-col-center gap-4 rounded-2xl border border-dashed border-slate-200 bg-white py-16 text-center"
+    >
+      <span class="flex-center h-14 w-14 rounded-2xl bg-main-50 text-main-400">
+        <i class="pi pi-folder-open text-3xl"></i>
+      </span>
+      <p class="max-w-xs text-sm leading-relaxed text-slate-500">
+        لا توجد مشاريع بعد — أنشئ مشروعًا وأضف دروسك لبدء توليد الأسئلة
+      </p>
+    </div>
+  }
+</div>
+
+<soual-generation-config-dialog
+  [lessons]="selectedLessons()"
+  [(visible)]="configDialogVisible"
+  (confirmed)="onConfigConfirmed($event)"
+/>
+
+<soual-generate-bar
+  [selectedCount]="selectedCount()"
+  [isLoading]="isGenerating()"
+  (generate)="configDialogVisible.set(true)"
+/>

@@ -93,11 +93,8 @@ export class AuthService {
     return this._httpClient
       .post<LoginResponse>(
         `${this.API}/token/refresh/`,
-        {},
+        { refresh: refreshToken },
         {
-          headers: {
-            Authorization: `Bearer ${refreshToken}`,
-          },
           context: new HttpContext().set(SKIP_AUTH_CTX, true),
         },
       )

@@ -1,0 +1,62 @@
+<p-dialog
+  [modal]="true"
+  [closable]="false"
+  [showHeader]="false"
+  [draggable]="false"
+  [style]="{ width: 'min(25rem, calc(100vw - 2rem))' }"
+  [(visible)]="visible"
+>
+  <div class="pt-5">
+    @if (showHeader()) {
+      <div class="flex items-center justify-between">
+        <div [class]="iconWrapperClass()">
+          <i [class]="iconClass()"></i>
+        </div>
+        <p-button
+          rounded
+          text
+          size="small"
+          severity="secondary"
+          icon="pi pi-times"
+          ariaLabel="إغلاق"
+          [disabled]="loading()"
+          (onClick)="close()"
+        />
+      </div>
+
+      <span class="block mt-5 text-base font-semibold text-slate-800">
+        {{ title() }}
+      </span>
+      <p class="text-sm text-slate-500 mt-1">
+        {{ message() }}
+      </p>
+    }
+
+    <ng-content select="[confirmContent]" />
+
+    @if (showFooter()) {
+      <div class="flex items-center gap-3 mt-6">
+        @if (showCancelButton()) {
+          <p-button
+            outlined
+            fluid
+            class="flex-1"
+            severity="secondary"
+            [label]="cancelLabel()"
+            [disabled]="loading()"
+            (onClick)="onCancel()"
+          />
+        }
+        <p-button
+          fluid
+          class="flex-1"
+          [severity]="severityConfig().isDanger ? 'danger' : 'primary'"
+          [loading]="loading()"
+          [label]="confirmLabel()"
+          [disabled]="confirmDisabled()"
+          (onClick)="onConfirm()"
+        />
+      </div>
+    }
+  </div>
+</p-dialog>

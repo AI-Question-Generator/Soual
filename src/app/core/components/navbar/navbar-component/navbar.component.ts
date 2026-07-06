@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { ButtonModule } from 'primeng/button';
 import { DrawerModule } from 'primeng/drawer';
 import { AvatarModule } from 'primeng/avatar';
-import { MenuModule } from 'primeng/menu';
+import { MenuModule, MenuPassThrough } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '@core/services/auth/auth.service';
@@ -42,6 +42,11 @@ export class NavbarComponent {
       icon: 'pi pi-user',
       command: () => this.goToProfile(),
     },
+    {
+      label: 'أسئلتي',
+      icon: 'pi pi-list',
+      command: () => this.goToGenerationRequests(),
+    },
     { separator: true },
     {
       label: 'تسجيل الخروج',
@@ -60,8 +65,17 @@ export class NavbarComponent {
     this.router.navigate(['/user-profile']);
   }
 
+  goToGenerationRequests() {
+    this.menuOpen = false;
+    this.router.navigate(['/generation/requests']);
+  }
+
   logout() {
     this.menuOpen = false;
     this.authService.logout().subscribe();
   }
+
+  readonly pt: MenuPassThrough = {
+    root: 'mt-1',
+  };
 }

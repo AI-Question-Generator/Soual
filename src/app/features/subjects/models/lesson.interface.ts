@@ -18,6 +18,9 @@ export interface LessonSummary {
   sourceCount: number;
   createdAt: string;
   sources: LessonSourceSummary[];
+  unitNumber: number;
+  order: number;
+  section: string;
 }
 
 export interface LessonWrite {
