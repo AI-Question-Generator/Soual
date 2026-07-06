@@ -1,5 +1,6 @@
 import Aura from '@primeuix/themes/aura';
 import { definePreset } from '@primeuix/themes';
+import { datatable } from './tokens/datatable.tokens';
 import { tabs } from './tokens/tabs.tokens';
 
 export const SoualPreset = definePreset(Aura, {
@@ -32,6 +33,7 @@ export const SoualPreset = definePreset(Aura, {
     },
   },
   components: {
+    datatable,
     tabs,
   },
 });
