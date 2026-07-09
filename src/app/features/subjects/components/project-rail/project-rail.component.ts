@@ -11,7 +11,13 @@ import { Project } from '@feature/subjects/models';
     <section class="rounded-2xl bg-white border border-slate-200 shadow-sm p-4">
       <header class="flex items-center justify-between mb-4">
         <h3 class="text-base font-bold text-slate-800">المشاريع</h3>
-        <p-button icon="pi pi-plus" size="small" ariaLabel="مشروع جديد" [rounded]="true" />
+        <p-button
+          icon="pi pi-plus"
+          size="small"
+          ariaLabel="مشروع جديد"
+          [rounded]="true"
+          (onClick)="createProject.emit()"
+        />
       </header>
 
       @if (projects().length === 0) {
@@ -74,6 +80,7 @@ import { Project } from '@feature/subjects/models';
 export class ProjectRailComponent {
   projects = input.required<Project[]>();
   readonly selectedProjectId = output<string>();
+  readonly createProject = output<void>();
 
   protected readonly defaultProject = computed(() => {
     return this.projects().find((p) => p.isDefault);
