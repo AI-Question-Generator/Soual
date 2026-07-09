@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@env/environment';
-import { SourceFileDto, SourceFileResponse } from '@feature/subjects/models/source-file.interface';
+import { SourceFileResponse } from '@feature/subjects/models/source-file.interface';
 
 @Injectable({ providedIn: 'root' })
 export class SourceFileService {
@@ -16,8 +16,14 @@ export class SourceFileService {
     return this._http.get<SourceFileResponse>(`${this.API}/${id}/`);
   }
 
-  uploadSourceFile(payload: SourceFileDto) {
-    return this._http.post<SourceFileResponse>(`${this.API}/`, payload);
+  uploadSourceFile(file: File) {
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+
+    return this._http.post<SourceFileResponse>(`${this.API}/upload/`, formData, {
+      reportProgress: true,
+      observe: 'events',
+    });
   }
 
   deleteSourceFile(id: string) {
