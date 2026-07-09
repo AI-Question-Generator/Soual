@@ -1,6 +1,15 @@
 import { Routes } from '@angular/router';
+import { authGuard } from '@core/guards';
 
 export const subjectRoutes: Routes = [
+  {
+    path: 'source-files',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('@feature/subjects/pages/source-files/source-files.component').then(
+        (m) => m.SourceFilesComponent,
+      ),
+  },
   {
     path: 'subjects',
     loadComponent: () =>
