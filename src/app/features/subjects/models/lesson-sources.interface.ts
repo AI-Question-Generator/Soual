@@ -1,15 +1,15 @@
 export interface LessonSource {
-  id: number;
-  startPage?: number;
-  endPage?: number;
-  extraction_config?: string;
+  id: string;
+  start_page?: number;
+  end_page?: number;
+  extraction_config?: Record<string, unknown>;
   order?: number;
   lesson: string;
   source_file: string;
 }
 
 export interface LessonSourceSummary {
-  id: number;
+  id: string;
   sourceFieldId: number;
   fileName: string;
   fileUrl: string;
@@ -23,7 +23,7 @@ export type LessonSourcePatchDto = Partial<LessonSourceDto>;
 
 export interface LessonSourceWrite {
   source_file: string;
-  startPage?: number;
-  endPage?: number;
+  start_page?: number;
+  end_page?: number;
   order?: number;
 }
