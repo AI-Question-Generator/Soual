@@ -1,4 +1,4 @@
-export * from './create-project-drawer/create-project-drawer.component';
+export * from './create-project-dialog/create-project-dialog.component';
 export * from './identity-tile/identity-tile.component';
 export * from './generate-bar/generate-bar.component';
 export * from './lesson-row/lesson-row.component';
