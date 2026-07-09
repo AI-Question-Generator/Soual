@@ -1,1 +1,1 @@
-// Shared pipes
+export * from './file-size.pipe';
