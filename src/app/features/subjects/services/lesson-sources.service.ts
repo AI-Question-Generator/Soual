@@ -20,19 +20,19 @@ export class LessonSourcesService {
     return this._http.post<LessonSource>(`${this.API}/`, payload);
   }
 
-  getLessonSourceById(id: number) {
+  getLessonSourceById(id: string) {
     return this._http.get<LessonSource>(`${this.API}/${id}/`);
   }
 
-  updateLessonSource(id: number, payload: LessonSourceDto) {
+  updateLessonSource(id: string, payload: LessonSourceDto) {
     return this._http.put<LessonSource>(`${this.API}/${id}/`, payload);
   }
 
-  patchLessonSource(id: number, payload: LessonSourcePatchDto) {
+  patchLessonSource(id: string, payload: LessonSourcePatchDto) {
     return this._http.patch<LessonSource>(`${this.API}/${id}/`, payload);
   }
 
-  deleteLessonSource(id: number) {
+  deleteLessonSource(id: string) {
     return this._http.delete<void>(`${this.API}/${id}/`);
   }
 }
