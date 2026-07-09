@@ -57,7 +57,7 @@ const POLL_INTERVAL_MS = 5000;
                 <span
                   class="rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-600"
                 >
-                  {{ request.lessonIds?.length ?? 0 }} درس
+                  {{ request.lessonIds.length }} درس
                 </span>
                 <span
                   class="rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-600"
