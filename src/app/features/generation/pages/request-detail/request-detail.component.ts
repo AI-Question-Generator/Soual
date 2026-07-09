@@ -18,6 +18,7 @@ import { QuestionGenerationService } from '@feature/generation/services';
 import { RequestStatus, type GenerationRequestResponse } from '@feature/generation/models';
 import { QuestionCardComponent, RequestStatusBadgeComponent } from '@feature/generation/components';
 import { ToastService } from '@shared/services';
+import { formatDate } from '@shared/utilities';
 
 const POLL_INTERVAL_MS = 5000;
 
@@ -170,12 +171,7 @@ export class RequestDetailComponent {
     });
   }
 
-  protected formatDate(value: string): string {
-    if (!value) return '—';
-    return new Intl.DateTimeFormat('ar-EG', { dateStyle: 'medium', timeStyle: 'short' }).format(
-      new Date(value),
-    );
-  }
+  protected readonly formatDate = (value: string) => formatDate(value, true);
 
   private fetchRequest(): void {
     this.generationService.getRequestById(this.id()).subscribe({

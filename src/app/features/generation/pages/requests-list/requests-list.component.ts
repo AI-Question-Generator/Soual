@@ -9,6 +9,7 @@ import type { GenerationRequestResponse } from '@feature/generation/models';
 import { RequestStatusBadgeComponent } from '@feature/generation/components';
 import { ConfirmDialogService } from '@shared/components/confirm-dialog';
 import { ToastService } from '@shared/services';
+import { formatDate } from '@shared/utilities';
 
 type RequestRow = GenerationRequestResponse & { totalQuestions: number };
 
@@ -132,6 +133,7 @@ export class RequestsListComponent implements OnInit {
 
   protected readonly requests = signal<RequestRow[] | null>(null);
   protected readonly skeletonRows = [0, 1, 2, 3];
+  protected readonly formatDate = (value: string) => formatDate(value, true);
 
   ngOnInit() {
     this.generationService.getRequests().subscribe({
@@ -152,13 +154,6 @@ export class RequestsListComponent implements OnInit {
 
   private totalQuestions(request: GenerationRequestResponse): number {
     return (request.questionConfigs ?? []).reduce((sum, config) => sum + config.numQuestions, 0);
-  }
-
-  protected formatDate(value: string): string {
-    if (!value) return '—';
-    return new Intl.DateTimeFormat('ar-EG', { dateStyle: 'medium', timeStyle: 'short' }).format(
-      new Date(value),
-    );
   }
 
   protected confirmDelete(event: MouseEvent, request: GenerationRequestResponse): void {
