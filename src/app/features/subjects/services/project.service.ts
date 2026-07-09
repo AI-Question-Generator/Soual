@@ -13,7 +13,7 @@ export class ProjectService {
   }
 
   createProject(payload: ProjectDto) {
-    return this._http.post<ProjectDto>(`${this.API}/`, payload);
+    return this._http.post<Project>(`${this.API}/`, payload);
   }
 
   getProjectById(id: string) {
