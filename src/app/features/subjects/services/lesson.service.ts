@@ -1,7 +1,12 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
-import { Lesson, LessonDto, LessonPatchDto } from '@feature/subjects/models/lesson.interface';
+import {
+  DomainChoice,
+  Lesson,
+  LessonDto,
+  LessonPatchDto,
+} from '@feature/subjects/models/lesson.interface';
 
 @Injectable({ providedIn: 'root' })
 export class LessonService {
@@ -12,23 +17,27 @@ export class LessonService {
     return this._http.get<Lesson[]>(`${this.API}/`);
   }
 
+  getDomains() {
+    return this._http.get<DomainChoice[]>(`${this.API}/domains/`);
+  }
+
   createLesson(payload: LessonDto) {
     return this._http.post<Lesson>(`${this.API}/`, payload);
   }
 
-  getLessonById(id: number) {
+  getLessonById(id: string) {
     return this._http.get<Lesson>(`${this.API}/${id}/`);
   }
 
-  updateLesson(id: number, payload: LessonDto) {
+  updateLesson(id: string, payload: LessonDto) {
     return this._http.put<Lesson>(`${this.API}/${id}/`, payload);
   }
 
-  patchLesson(id: number, payload: LessonPatchDto) {
+  patchLesson(id: string, payload: LessonPatchDto) {
     return this._http.patch<Lesson>(`${this.API}/${id}/`, payload);
   }
 
-  deleteLesson(id: number) {
+  deleteLesson(id: string) {
     return this._http.delete<void>(`${this.API}/${id}/`);
   }
 }
