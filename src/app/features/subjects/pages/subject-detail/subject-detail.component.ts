@@ -23,6 +23,8 @@ import { QuestionGenerationService } from '@feature/generation/services';
 import type { LessonGenerationConfig } from '@feature/generation/models';
 import { GenerationConfigDialogComponent } from '@feature/generation/components';
 import { ToastService } from '@shared/services';
+import { ConfirmDialogService } from '@shared/components/confirm-dialog';
+import { tap } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { CreateProjectDialogComponent } from '@feature/subjects/components/create-project-dialog/create-project-dialog.component';
 
@@ -51,6 +53,7 @@ export class SubjectDetailComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly projectService = inject(ProjectService);
   private readonly generationService = inject(QuestionGenerationService);
+  private readonly confirmDialog = inject(ConfirmDialogService);
 
   protected readonly projects = signal<Project[] | null>(null);
   protected readonly isLoadingProjects = signal(false);
@@ -99,6 +102,35 @@ export class SubjectDetailComponent implements OnInit {
   protected onProjectCreated(project: Project): void {
     this.projects.update((projects) => [project, ...(projects ?? [])]);
     this.selectedProject.set(project);
+  }
+
+  protected confirmDeleteProject(project: Project): void {
+    if (project.isDefault) return;
+    this.confirmDialog.confirm({
+      severity: 'danger',
+      title: 'حذف المشروع؟',
+      message: `هل أنت متأكد من حذف "${project.name}"؟ سيتم حذف كل دروسه ولا يمكن التراجع عن هذا الإجراء.`,
+      confirmLabel: 'حذف',
+      icon: 'pi pi-trash',
+      onConfirm: () => this.deleteProject(project),
+    });
+  }
+
+  private deleteProject(project: Project) {
+    return this.projectService.deleteProject(project.id).pipe(
+      tap({
+        next: () => {
+          this.projects.update((projects) => (projects ?? []).filter((p) => p.id !== project.id));
+          if (this.selectedProject()?.id === project.id) {
+            this.selection.clear();
+            const remaining = this.projects() ?? [];
+            this.selectedProject.set(remaining.find((p) => p.isDefault) ?? remaining[0] ?? null);
+          }
+          this.toast.success('تم حذف المشروع', `تمت إزالة "${project.name}" من مشاريعك`);
+        },
+        error: () => this.toast.error('تعذر حذف المشروع', 'حدث خطأ أثناء حذف المشروع'),
+      }),
+    );
   }
 
   protected onConfigConfirmed(lessons: LessonGenerationConfig[]): void {

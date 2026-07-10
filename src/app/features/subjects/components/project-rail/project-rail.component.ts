@@ -41,7 +41,20 @@ import { Project } from '@feature/subjects/models';
                       </p>
                     }
                   </div>
-                  <i class="pi pi-check-circle text-white/90 text-sm shrink-0"></i>
+                  <div class="flex items-center gap-1 shrink-0">
+                    <i class="pi pi-check-circle text-white/90 text-sm"></i>
+                    @if (!project.isDefault) {
+                      <p-button
+                        icon="pi pi-trash"
+                        severity="danger"
+                        size="small"
+                        ariaLabel="حذف المشروع"
+                        [text]="true"
+                        [rounded]="true"
+                        (onClick)="$event.stopPropagation(); deleteProject.emit(project)"
+                      />
+                    }
+                  </div>
                 </div>
 
                 <div class="mt-3 flex items-center gap-2">
@@ -60,14 +73,27 @@ import { Project } from '@feature/subjects/models';
                 class="rounded-xl border border-slate-200 p-4 cursor-pointer transition-all duration-150 hover:-translate-y-0.5 hover:shadow-md hover:border-main-200"
                 (click)="selectedProjectId.emit(project.id)"
               >
-                <div class="flex flex-col gap-1 min-w-0">
-                  <h4 class="text-slate-800 font-bold text-base leading-tight">
-                    {{ project.name }}
-                  </h4>
-                  @if (project.description) {
-                    <p class="text-slate-500 text-xs leading-relaxed line-clamp-2">
-                      {{ project.description }}
-                    </p>
+                <div class="flex items-start justify-between gap-2">
+                  <div class="flex flex-col gap-1 min-w-0">
+                    <h4 class="text-slate-800 font-bold text-base leading-tight">
+                      {{ project.name }}
+                    </h4>
+                    @if (project.description) {
+                      <p class="text-slate-500 text-xs leading-relaxed line-clamp-2">
+                        {{ project.description }}
+                      </p>
+                    }
+                  </div>
+                  @if (!project.isDefault) {
+                    <p-button
+                      icon="pi pi-trash"
+                      severity="danger"
+                      size="small"
+                      ariaLabel="حذف المشروع"
+                      [text]="true"
+                      [rounded]="true"
+                      (onClick)="$event.stopPropagation(); deleteProject.emit(project)"
+                    />
                   }
                 </div>
 
@@ -98,4 +124,5 @@ export class ProjectRailComponent {
   activeProjectId = input<string | null>(null);
   readonly selectedProjectId = output<string>();
   readonly createProject = output<void>();
+  readonly deleteProject = output<Project>();
 }

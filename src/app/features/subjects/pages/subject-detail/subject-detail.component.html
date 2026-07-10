@@ -18,6 +18,7 @@
           [activeProjectId]="selectedProject()?.id ?? null"
           (selectedProjectId)="selectProject($event)"
           (createProject)="createDialogVisible.set(true)"
+          (deleteProject)="confirmDeleteProject($event)"
         />
 
         <soual-selection-summary [lessons]="selectedLessons()" />
