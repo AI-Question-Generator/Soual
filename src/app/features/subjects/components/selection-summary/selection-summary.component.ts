@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
-import { LessonSummary } from '@feature/subjects/models';
+import { LessonSummary } from '@feature/projects/models';
 import { LessonSelectionService } from '@feature/subjects/services/lesson-selection.service';
 
 @Component({

@@ -13,7 +13,7 @@ export interface Project {
 export interface ProjectDto {
   name: string;
   description?: string;
-  isDefault: boolean;
+  is_default?: boolean;
   lessons: LessonWrite[];
 }
 

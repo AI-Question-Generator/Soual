@@ -1,4 +1,4 @@
-import type { Project } from './project.interface';
+import type { Project } from '@feature/projects/models';
 
 export type SubjectName =
   | 'english'

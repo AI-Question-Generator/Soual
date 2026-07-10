@@ -40,42 +40,41 @@ export class NavbarComponent {
     {
       label: 'الملف الشخصي',
       icon: 'pi pi-user',
-      command: () => this.goToProfile(),
+      command: () => this.router.navigate(['/user-profile']),
     },
     {
       label: 'أسئلتي',
       icon: 'pi pi-list',
-      command: () => this.goToGenerationRequests(),
+      command: () => this.router.navigate(['/generation/requests']),
+    },
+    {
+      label: 'الملفات المرفوعة',
+      icon: 'pi pi-folder',
+      command: () => this.router.navigate(['/source-files']),
     },
     { separator: true },
     {
       label: 'تسجيل الخروج',
       icon: 'pi pi-sign-out',
-      command: () => this.logout(),
+      command: () => {
+        this.authService.logout().subscribe();
+        this.router.navigate(['/login']);
+      },
     },
   ];
-
-  navigateToLogin() {
-    this.menuOpen = false;
-    this.router.navigate(['/login']);
-  }
-
-  goToProfile() {
-    this.menuOpen = false;
-    this.router.navigate(['/user-profile']);
-  }
-
-  goToGenerationRequests() {
-    this.menuOpen = false;
-    this.router.navigate(['/generation/requests']);
-  }
-
-  logout() {
-    this.menuOpen = false;
-    this.authService.logout().subscribe();
-  }
 
   readonly pt: MenuPassThrough = {
     root: 'mt-1',
   };
+
+  navigateToLogin(): void {
+    this.menuOpen = false;
+    this.router.navigate(['/login']);
+  }
+
+  logout(): void {
+    this.menuOpen = false;
+    this.authService.logout().subscribe();
+    this.router.navigate(['/login']);
+  }
 }

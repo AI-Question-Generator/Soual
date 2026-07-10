@@ -19,7 +19,7 @@ import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { QuestionGenerationService } from '@feature/generation/services';
 import type { LessonGenerationConfig, QuestionType } from '@feature/generation/models';
-import type { LessonSummary } from '@feature/subjects/models';
+import type { LessonSummary } from '@feature/projects/models';
 import { ToastService } from '@shared/services';
 
 const DEFAULT_NUM_QUESTIONS = 3;

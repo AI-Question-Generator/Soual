@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
-import { Project, ProjectDto, ProjectPatchDto } from '@feature/subjects/models/project.interface';
+import { Project, ProjectDto, ProjectPatchDto } from '@feature/projects/models/project.interface';
 
 @Injectable({ providedIn: 'root' })
 export class ProjectService {
@@ -13,7 +13,7 @@ export class ProjectService {
   }
 
   createProject(payload: ProjectDto) {
-    return this._http.post<ProjectDto>(`${this.API}/`, payload);
+    return this._http.post<Project>(`${this.API}/`, payload);
   }
 
   getProjectById(id: string) {

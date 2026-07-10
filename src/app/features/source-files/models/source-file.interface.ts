@@ -8,7 +8,3 @@ export interface SourceFileResponse {
   fileType: string;
   uploadedAt: string;
 }
-
-export interface SourceFileDto {
-  file: string;
-}

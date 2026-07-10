@@ -1,7 +1,14 @@
 import { LessonSourceSummary, LessonSourceWrite } from './lesson-sources.interface';
 
+export type DomainEnum =
+  | 'english_vocab'
+  | 'english_syn_ant'
+  | 'english_def_der_col'
+  | 'english_exp_idi_prep'
+  | 'english_grammar';
+
 export interface Lesson {
-  id: number;
+  id: string;
   title: string;
   description?: string;
   createdAt: string;
@@ -23,8 +30,15 @@ export interface LessonSummary {
   section: string;
 }
 
+export interface DomainChoice {
+  value: string;
+  label: string;
+}
+
 export interface LessonWrite {
   title: string;
   description?: string;
+  domain?: DomainEnum;
   sources: LessonSourceWrite[];
+  language?: 'en' | 'ar';
 }
