@@ -1,0 +1,202 @@
+<p-dialog
+  header="إنشاء مشروع جديد"
+  [modal]="true"
+  [draggable]="false"
+  [style]="{ width: '44rem', maxWidth: '95vw' }"
+  [(visible)]="visible"
+  (visibleChange)="!$event && cancel()"
+>
+  <p-stepper [value]="step()">
+    <p-step-list>
+      <p-step [value]="1">بيانات المشروع</p-step>
+      <p-step [value]="2">الدروس</p-step>
+    </p-step-list>
+
+    <p-step-panels>
+      <p-step-panel [value]="1">
+        <ng-template #content>
+          <form class="flex flex-col gap-4 py-4" [formGroup]="form">
+            <div class="flex flex-col gap-1">
+              @let nameInvalid = form.controls.name.invalid && form.controls.name.touched;
+              <p-floatLabel variant="on">
+                <input pInputText id="projectName" formControlName="name" class="w-full" />
+                <label for="projectName">اسم المشروع</label>
+              </p-floatLabel>
+
+              @if (nameInvalid) {
+                <p-message severity="error">
+                  {{ form.controls.name.errors | pControlError }}
+                </p-message>
+              }
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p-floatLabel variant="on">
+                <textarea
+                  pTextarea
+                  id="projectDescription"
+                  formControlName="description"
+                  rows="3"
+                  class="w-full"
+                ></textarea>
+                <label for="projectDescription">الوصف (اختياري)</label>
+              </p-floatLabel>
+            </div>
+          </form>
+        </ng-template>
+      </p-step-panel>
+
+      <p-step-panel [value]="2">
+        <ng-template #content>
+          <div class="flex flex-col gap-4 py-4">
+            @let files = sourceFiles();
+            @if (files !== null && files.length === 0) {
+              <div
+                class="flex items-center gap-3 rounded-xl border border-amber-100 bg-amber-50 p-4 text-sm text-amber-800"
+              >
+                <i class="pi pi-exclamation-triangle text-lg"></i>
+                <span class="flex-1">
+                  لا توجد ملفات مرفوعة بعد. ارفع ملفًا من
+                  <a routerLink="/source-files" class="font-bold underline">مكتبة الملفات</a>
+                  لتتمكن من إضافة درس.
+                </span>
+              </div>
+            }
+
+            <div class="flex flex-col gap-3" [formGroup]="form">
+              <div formArrayName="lessons" class="flex flex-col gap-3">
+                @for (lessonGroup of lessons.controls; track i; let i = $index) {
+                  <div class="rounded-xl border border-slate-200 p-4" [formGroupName]="i">
+                    <div class="flex-between mb-3">
+                      <h4 class="text-sm font-bold text-slate-800">درس {{ i + 1 }}</h4>
+                      @if (lessons.length > 1) {
+                        <p-button
+                          icon="pi pi-trash"
+                          severity="danger"
+                          size="small"
+                          ariaLabel="حذف الدرس"
+                          [text]="true"
+                          [rounded]="true"
+                          (onClick)="lessons.removeAt(i)"
+                        />
+                      }
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                      <div class="flex flex-col gap-1 md:col-span-2">
+                        <p-floatLabel variant="on">
+                          <input
+                            pInputText
+                            formControlName="title"
+                            class="w-full"
+                            [id]="`title-${i}`"
+                          />
+                          <label [for]="`title-${i}`">اسم الدرس</label>
+                        </p-floatLabel>
+                      </div>
+
+                      <div class="flex flex-col gap-1">
+                        <p-floatLabel variant="on">
+                          <p-select
+                            formControlName="domain"
+                            optionLabel="label"
+                            optionValue="value"
+                            class="w-full"
+                            [inputId]="`domain-${i}`"
+                            [options]="domains() ?? []"
+                          />
+                          <label [for]="`domain-${i}`">المجال</label>
+                        </p-floatLabel>
+                      </div>
+
+                      <div class="flex flex-col gap-1">
+                        <p-floatLabel variant="on">
+                          <p-select
+                            formControlName="sourceFile"
+                            optionLabel="fileName"
+                            optionValue="id"
+                            class="w-full"
+                            [inputId]="`sourceFile-${i}`"
+                            [options]="sourceFiles() ?? []"
+                          />
+                          <label [for]="`sourceFile-${i}`">الملف المصدر</label>
+                        </p-floatLabel>
+                      </div>
+
+                      <div class="flex flex-col gap-1">
+                        <p-floatLabel variant="on">
+                          <p-inputnumber
+                            formControlName="startPage"
+                            class="w-full"
+                            [inputId]="`startPage-${i}`"
+                            [min]="1"
+                            [max]="pageCountFor(lessonGroup) ?? undefined"
+                          />
+                          <label [for]="`startPage-${i}`">من صفحة</label>
+                        </p-floatLabel>
+                      </div>
+
+                      <div class="flex flex-col gap-1">
+                        <p-floatLabel variant="on">
+                          <p-inputnumber
+                            formControlName="endPage"
+                            class="w-full"
+                            [inputId]="`endPage-${i}`"
+                            [min]="1"
+                            [max]="pageCountFor(lessonGroup) ?? undefined"
+                          />
+                          <label [for]="`endPage-${i}`">إلى صفحة</label>
+                        </p-floatLabel>
+                      </div>
+
+                      @if (pageCountFor(lessonGroup); as pageCount) {
+                        <p class="text-xs text-slate-400 md:col-span-2">
+                          هذا الملف يحتوي على {{ pageCount }} صفحة
+                        </p>
+                      }
+
+                      @if (lessonGroup.errors?.['pageRangeInvalid'] && lessonGroup.touched) {
+                        <small class="text-xs text-red-500 md:col-span-2">
+                          صفحة النهاية يجب أن تكون أكبر من أو تساوي صفحة البداية
+                        </small>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+
+              <p-button
+                label="أضف درسًا آخر"
+                icon="pi pi-plus"
+                [text]="true"
+                [disabled]="sourceFiles() !== null && sourceFiles()!.length === 0"
+                (onClick)="addLesson()"
+              />
+            </div>
+          </div>
+        </ng-template>
+      </p-step-panel>
+    </p-step-panels>
+  </p-stepper>
+
+  <ng-template #footer>
+    <div class="flex items-center justify-between gap-3">
+      <p-button label="إلغاء" severity="secondary" [outlined]="true" (onClick)="cancel()" />
+      <div class="flex items-center gap-2">
+        @if (step() === 2) {
+          <p-button label="رجوع" severity="secondary" [outlined]="true" (onClick)="step.set(1)" />
+        }
+        @if (step() === 1) {
+          <p-button label="التالي" icon="pi pi-arrow-left" (onClick)="goToLessonsStep()" />
+        } @else {
+          <p-button
+            label="إنشاء المشروع"
+            [loading]="isSubmitting()"
+            [disabled]="form.invalid"
+            (onClick)="submit()"
+          />
+        }
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
