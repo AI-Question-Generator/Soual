@@ -23,6 +23,8 @@ import { QuestionGenerationService } from '@feature/generation/services';
 import type { LessonGenerationConfig } from '@feature/generation/models';
 import { GenerationConfigDialogComponent } from '@feature/generation/components';
 import { ToastService } from '@shared/services';
+import { ButtonModule } from 'primeng/button';
+import { CreateProjectDialogComponent } from '@feature/subjects/components/create-project-dialog/create-project-dialog.component';
 
 @Component({
   selector: 'soual-subject-detail',
@@ -38,6 +40,8 @@ import { ToastService } from '@shared/services';
     GenerationConfigDialogComponent,
     AccordionModule,
     ProgressBarModule,
+    ButtonModule,
+    CreateProjectDialogComponent,
   ],
   templateUrl: './subject-detail.component.html',
 })
@@ -52,6 +56,7 @@ export class SubjectDetailComponent implements OnInit {
   protected readonly isLoadingProjects = signal(false);
   protected readonly selectedProject = signal<Project | null>(null);
   protected readonly configDialogVisible = signal(false);
+  protected readonly createDialogVisible = signal(false);
   protected readonly isGenerating = signal(false);
 
   protected readonly lessons = computed(() => this.selectedProject()?.lessons ?? []);
@@ -89,6 +94,11 @@ export class SubjectDetailComponent implements OnInit {
     this.selection.clear();
     const project = this.projects()?.find((p) => p.id === id);
     this.selectedProject.set(project ?? null);
+  }
+
+  protected onProjectCreated(project: Project): void {
+    this.projects.update((projects) => [project, ...(projects ?? [])]);
+    this.selectedProject.set(project);
   }
 
   protected onConfigConfirmed(lessons: LessonGenerationConfig[]): void {

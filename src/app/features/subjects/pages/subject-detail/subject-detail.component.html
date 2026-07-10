@@ -15,7 +15,9 @@
       <aside class="flex flex-col gap-4 lg:sticky lg:top-6">
         <soual-project-rail
           [projects]="projects() ?? []"
+          [activeProjectId]="selectedProject()?.id ?? null"
           (selectedProjectId)="selectProject($event)"
+          (createProject)="createDialogVisible.set(true)"
         />
 
         <soual-selection-summary [lessons]="selectedLessons()" />
@@ -125,9 +127,20 @@
       <p class="max-w-xs text-sm leading-relaxed text-slate-500">
         لا توجد مشاريع بعد — أنشئ مشروعًا وأضف دروسك لبدء توليد الأسئلة
       </p>
+      <p-button
+        label="إنشاء مشروع"
+        icon="pi pi-plus"
+        size="small"
+        (onClick)="createDialogVisible.set(true)"
+      />
     </div>
   }
 </div>
+
+<soual-create-project-dialog
+  [(visible)]="createDialogVisible"
+  (created)="onProjectCreated($event)"
+/>
 
 <soual-generation-config-dialog
   [lessons]="selectedLessons()"
