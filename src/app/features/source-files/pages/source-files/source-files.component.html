@@ -33,7 +33,7 @@
   </p-fileUpload>
 
   @if (activeUpload(); as upload) {
-    <div class="flex flex-col gap-2 rounded-xl border border-main-100 bg-main-50/50 p-4">
+    <div class="flex flex-col gap-3 rounded-xl border border-main-100 bg-main-50/50 p-4">
       <div class="flex-between gap-3 text-sm">
         <span class="flex min-w-0 items-center gap-2 text-slate-700">
           <i class="pi pi-spin pi-spinner text-main-500"></i>
@@ -45,7 +45,7 @@
           >
         }
       </div>
-      <p-progressBar [value]="upload.progress" [showValue]="true" />
+      <p-progressBar [value]="upload.progress" [showValue]="true" [pt]="{ root: 'h-5' }" />
     </div>
   }
 
