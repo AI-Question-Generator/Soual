@@ -40,4 +40,5 @@ export interface LessonWrite {
   description?: string;
   domain?: DomainEnum;
   sources: LessonSourceWrite[];
+  language?: 'en' | 'ar';
 }

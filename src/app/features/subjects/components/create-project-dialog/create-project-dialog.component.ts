@@ -73,6 +73,11 @@ export class CreateProjectDialogComponent implements OnInit {
   protected readonly domains = signal<DomainChoice[] | null>(null);
   protected readonly sourceFiles = signal<SourceFileResponse[] | null>(null);
 
+  protected readonly languages: { value: 'en' | 'ar'; label: string }[] = [
+    { value: 'ar', label: 'العربية' },
+    { value: 'en', label: 'الإنجليزية' },
+  ];
+
   protected readonly form = this.fb.group({
     name: this.fb.nonNullable.control('', [
       Validators.required,
@@ -92,6 +97,7 @@ export class CreateProjectDialogComponent implements OnInit {
         sourceFile: this.fb.nonNullable.control('', Validators.required),
         startPage: this.fb.control<number | null>(null, [Validators.required, Validators.min(1)]),
         endPage: this.fb.control<number | null>(null, [Validators.required, Validators.min(1)]),
+        language: this.fb.nonNullable.control<'en' | 'ar'>('en'),
       },
       { validators: pageRangeValidator },
     );
@@ -144,6 +150,7 @@ export class CreateProjectDialogComponent implements OnInit {
         title: lesson.title,
         description: lesson.description || undefined,
         domain: lesson.domain as DomainEnum,
+        language: lesson.language,
         sources: [
           {
             source_file: lesson.sourceFile,
