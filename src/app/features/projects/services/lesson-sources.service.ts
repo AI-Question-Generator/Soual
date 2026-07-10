@@ -5,7 +5,7 @@ import {
   LessonSource,
   LessonSourceDto,
   LessonSourcePatchDto,
-} from '@feature/subjects/models/lesson-sources.interface';
+} from '@feature/projects/models/lesson-sources.interface';
 
 @Injectable({ providedIn: 'root' })
 export class LessonSourcesService {

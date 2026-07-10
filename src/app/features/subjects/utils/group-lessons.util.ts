@@ -1,4 +1,5 @@
-import type { LessonSummary, SectionGroup, UnitGroup } from '@feature/subjects/models';
+import type { LessonSummary } from '@feature/projects/models';
+import type { SectionGroup, UnitGroup } from '@feature/subjects/models';
 
 interface SectionMeta {
   label: string;

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
-import { Project } from '@feature/subjects/models';
+import { Project } from '@feature/projects/models';
 
 @Component({
   selector: 'soual-project-rail',

@@ -9,15 +9,16 @@ import {
 import { Router } from '@angular/router';
 import { AccordionModule } from 'primeng/accordion';
 import { ProgressBarModule } from 'primeng/progressbar';
-import type { Project } from '@feature/subjects/models';
+import type { Project } from '@feature/projects/models';
 import {
   GenerateBarComponent,
   IdentityTileComponent,
   LessonUnitComponent,
-  ProjectRailComponent,
   SelectionSummaryComponent,
 } from '@feature/subjects/components';
-import { LessonSelectionService, ProjectService } from '@feature/subjects/services';
+import { LessonSelectionService } from '@feature/subjects/services';
+import { CreateProjectDialogComponent, ProjectRailComponent } from '@feature/projects/components';
+import { ProjectService } from '@feature/projects/services';
 import { groupLessonsByUnit } from '@feature/subjects/utils/group-lessons.util';
 import { QuestionGenerationService } from '@feature/generation/services';
 import type { LessonGenerationConfig } from '@feature/generation/models';
@@ -26,7 +27,6 @@ import { ToastService } from '@shared/services';
 import { ConfirmDialogService } from '@shared/components/confirm-dialog';
 import { tap } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
-import { CreateProjectDialogComponent } from '@feature/subjects/components/create-project-dialog/create-project-dialog.component';
 
 @Component({
   selector: 'soual-subject-detail',

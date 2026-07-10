@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
-import { LessonSummary } from '@feature/subjects/models';
+import { LessonSummary } from '@feature/projects/models';
 import { LessonSelectionService } from '@feature/subjects/services/lesson-selection.service';
 
 @Component({

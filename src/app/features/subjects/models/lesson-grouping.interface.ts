@@ -1,4 +1,4 @@
-import { LessonSummary } from './lesson.interface';
+import { LessonSummary } from '@feature/projects/models';
 
 export interface SectionGroup {
   section: string;
