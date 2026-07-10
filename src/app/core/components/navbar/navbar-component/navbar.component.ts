@@ -66,4 +66,15 @@ export class NavbarComponent {
   readonly pt: MenuPassThrough = {
     root: 'mt-1',
   };
+
+  navigateToLogin(): void {
+    this.menuOpen = false;
+    this.router.navigate(['/login']);
+  }
+
+  logout(): void {
+    this.menuOpen = false;
+    this.authService.logout().subscribe();
+    this.router.navigate(['/login']);
+  }
 }
