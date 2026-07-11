@@ -72,6 +72,11 @@ export class NavbarComponent {
     this.router.navigate(['/login']);
   }
 
+  navigateToRegister(): void {
+    this.menuOpen = false;
+    this.router.navigate(['/register']);
+  }
+
   logout(): void {
     this.menuOpen = false;
     this.authService.logout().subscribe();

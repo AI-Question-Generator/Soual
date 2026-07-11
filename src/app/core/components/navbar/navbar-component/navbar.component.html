@@ -8,9 +8,10 @@
   <div class="hidden md:flex items-center gap-6 lg:gap-8 text-slate-600 font-medium">
     <a routerLink="/" class="hover:text-main-600 transition-colors">الرئيسية</a>
     <a routerLink="/subjects" class="hover:text-main-600 transition-colors">المواد</a>
-    <a routerLink="/features" class="hover:text-main-600 transition-colors">المميزات</a>
-    <a routerLink="/pricing" class="hover:text-main-600 transition-colors">الأسعار</a>
-    <a routerLink="/contact" class="hover:text-main-600 transition-colors">اتصل بنا</a>
+    <a routerLink="/" fragment="features" class="hover:text-main-600 transition-colors">المميزات</a>
+    <a routerLink="/" fragment="faq" class="hover:text-main-600 transition-colors"
+      >الأسئلة الشائعة</a
+    >
   </div>
 
   <!-- Action Area -->
@@ -27,7 +28,7 @@
       </button>
       <p-menu #userMenu appendTo="body" [model]="userMenuItems" [popup]="true" [pt]="pt" />
     } @else {
-      <p-button label="ابدأ الآن مجاناً" icon="pi pi-bolt" />
+      <p-button label="ابدأ الآن مجاناً" icon="pi pi-bolt" (click)="navigateToRegister()" />
       <p-button label="تسجيل الدخول" outlined icon="pi pi-sign-in" (click)="navigateToLogin()" />
     }
   </div>
@@ -81,7 +82,8 @@
       </a>
 
       <a
-        routerLink="/features"
+        routerLink="/"
+        fragment="features"
         class="flex items-center gap-4 p-3 rounded-xl transition-all duration-200 hover:bg-slate-50 text-slate-600 hover:text-slate-900 group"
         (click)="menuOpen = false"
       >
@@ -90,21 +92,13 @@
       </a>
 
       <a
-        routerLink="/pricing"
+        routerLink="/"
+        fragment="faq"
         class="flex items-center gap-4 p-3 rounded-xl transition-all duration-200 hover:bg-slate-50 text-slate-600 hover:text-slate-900 group"
         (click)="menuOpen = false"
       >
-        <i class="pi pi-tag text-lg group-hover:scale-110 transition-transform"></i>
-        <span class="text-lg">الأسعار</span>
-      </a>
-
-      <a
-        routerLink="/contact"
-        class="flex items-center gap-4 p-3 rounded-xl transition-all duration-200 hover:bg-slate-50 text-slate-600 hover:text-slate-900 group"
-        (click)="menuOpen = false"
-      >
-        <i class="pi pi-envelope text-lg group-hover:scale-110 transition-transform"></i>
-        <span class="text-lg">اتصل بنا</span>
+        <i class="pi pi-question-circle text-lg group-hover:scale-110 transition-transform"></i>
+        <span class="text-lg">الأسئلة الشائعة</span>
       </a>
 
       @if (authService.isAuthenticated()) {
@@ -125,16 +119,26 @@
           <i class="pi pi-list text-lg group-hover:scale-110 transition-transform"></i>
           <span class="text-lg">أسئلتي</span>
         </a>
+
+        <a
+          routerLink="/source-files"
+          class="flex items-center gap-4 p-3 rounded-xl transition-all duration-200 hover:bg-slate-50 text-slate-600 hover:text-slate-900 group"
+          (click)="menuOpen = false"
+        >
+          <i class="pi pi-folder text-lg group-hover:scale-110 transition-transform"></i>
+          <span class="text-lg">الملفات المرفوعة</span>
+        </a>
       }
     </div>
 
     <div class="mt-auto flex flex-col gap-4 px-2">
       <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">المساعدة</span>
-      <a href="#" class="text-sm text-slate-500 hover:text-primary transition-colors"
-        >مركز المساعدة</a
-      >
-      <a href="#" class="text-sm text-slate-500 hover:text-primary transition-colors"
-        >الشروط والأحكام</a
+      <a
+        routerLink="/"
+        fragment="faq"
+        class="text-sm text-slate-500 hover:text-primary transition-colors"
+        (click)="menuOpen = false"
+        >الأسئلة الشائعة</a
       >
     </div>
   </div>
@@ -151,7 +155,12 @@
           (click)="logout()"
         />
       } @else {
-        <p-button label="ابدأ الآن مجاناً" icon="pi pi-bolt" styleClass="w-full" />
+        <p-button
+          label="ابدأ الآن مجاناً"
+          icon="pi pi-bolt"
+          styleClass="w-full"
+          (click)="navigateToRegister()"
+        />
         <p-button
           label="تسجيل الدخول"
           icon="pi pi-sign-in"
