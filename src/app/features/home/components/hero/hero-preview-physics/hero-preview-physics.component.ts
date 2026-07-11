@@ -12,7 +12,7 @@ import { ChangeDetectionStrategy, Component, computed, signal, OnDestroy } from 
 })
 export class HeroPreviewPhysicsComponent implements OnDestroy {
   totalSeconds = signal(10 * 60);
-  timerId: number;
+  timerId: ReturnType<typeof setInterval>;
 
   minutesTimer = computed(() => Math.floor(this.totalSeconds() / 60));
   secondsTimer = computed(() => String(this.totalSeconds() % 60).padStart(2, '0'));

@@ -29,7 +29,7 @@ export class HeroPreviewAiGeneratorComponent implements OnInit, OnDestroy {
 
   isComplete = computed(() => this.loadingProgress() === 100);
 
-  private intervalId: number | undefined;
+  private intervalId: ReturnType<typeof setInterval> | undefined;
 
   ngOnInit() {
     this.startSimulation();
