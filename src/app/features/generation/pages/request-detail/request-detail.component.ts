@@ -10,12 +10,25 @@ import {
 } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
+import {
+  CdkDrag,
+  CdkDragHandle,
+  CdkDropList,
+  moveItemInArray,
+  type CdkDragDrop,
+} from '@angular/cdk/drag-drop';
 import { catchError, EMPTY, switchMap, takeWhile, timer } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
+import { MenuModule } from 'primeng/menu';
 import { MessageModule } from 'primeng/message';
 import { ProgressBarModule } from 'primeng/progressbar';
-import { QuestionGenerationService } from '@feature/generation/services';
-import { RequestStatus, type GenerationRequestResponse } from '@feature/generation/models';
+import type { MenuItem } from 'primeng/api';
+import { QuestionExportService, QuestionGenerationService } from '@feature/generation/services';
+import {
+  RequestStatus,
+  type GeneratedQuestion,
+  type GenerationRequestResponse,
+} from '@feature/generation/models';
 import { QuestionCardComponent, RequestStatusBadgeComponent } from '@feature/generation/components';
 import { ToastService } from '@shared/services';
 import { formatDate } from '@shared/utilities';
@@ -28,12 +41,29 @@ const POLL_INTERVAL_MS = 5000;
   host: { class: 'container block py-6' },
   imports: [
     RouterLink,
+    CdkDropList,
+    CdkDrag,
+    CdkDragHandle,
     ButtonModule,
+    MenuModule,
     MessageModule,
     ProgressBarModule,
     QuestionCardComponent,
     RequestStatusBadgeComponent,
   ],
+  styles: `
+    .cdk-drag-placeholder {
+      opacity: 0.4;
+      border: 2px dashed var(--p-primary-color, #3b82f6);
+      border-radius: 1rem;
+    }
+    .cdk-drag-animating {
+      transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    }
+    .questions-drop-list.cdk-drop-list-dragging > *:not(.cdk-drag-placeholder) {
+      transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    }
+  `,
   template: `
     <div class="flex flex-col gap-6">
       <p-button
@@ -105,10 +135,42 @@ const POLL_INTERVAL_MS = 5000;
                 >
                   {{ questions().length }} سؤال
                 </span>
+                <p-menu
+                  #exportMenu
+                  appendTo="body"
+                  [model]="exportItems"
+                  [popup]="true"
+                  [pt]="{ root: 'mt-1' }"
+                />
+                <p-button
+                  class="ms-auto"
+                  size="small"
+                  outlined
+                  icon="pi pi-file-word"
+                  label="تصدير Word"
+                  (onClick)="exportMenu.toggle($event)"
+                />
               </div>
-              @for (question of questions(); track question.id; let i = $index) {
-                <soual-question-card [question]="question" [index]="i" />
-              }
+              <div
+                cdkDropList
+                class="questions-drop-list flex flex-col gap-4"
+                [cdkDropListData]="questions()"
+                (cdkDropListDropped)="onQuestionDrop($event)"
+              >
+                @for (question of questions(); track question.id; let i = $index) {
+                  <div cdkDrag class="flex items-stretch gap-2">
+                    <p-button
+                      cdkDragHandle
+                      text
+                      severity="secondary"
+                      icon="pi pi-bars"
+                      class="shrink-0 self-center cursor-move"
+                      ariaLabel="اسحب لإعادة ترتيب السؤال"
+                    />
+                    <soual-question-card class="flex-1" [question]="question" [index]="i" />
+                  </div>
+                }
+              </div>
             </section>
           }
         }
@@ -125,6 +187,7 @@ export class RequestDetailComponent {
   id = input.required<string>();
 
   private readonly generationService = inject(QuestionGenerationService);
+  private readonly exportService = inject(QuestionExportService);
   private readonly toast = inject(ToastService);
 
   protected readonly request = signal<GenerationRequestResponse | null>(null);
@@ -157,6 +220,19 @@ export class RequestDetailComponent {
     (this.request()?.questionConfigs ?? []).reduce((sum, config) => sum + config.numQuestions, 0),
   );
 
+  protected readonly exportItems: MenuItem[] = [
+    {
+      label: 'نموذج الإجابة',
+      icon: 'pi pi-file-word',
+      command: () => this.exportWord(true),
+    },
+    {
+      label: 'نسخة الطالب',
+      icon: 'pi pi-file-word',
+      command: () => this.exportWord(false),
+    },
+  ];
+
   constructor() {
     effect(() => {
       const polled = this.polledStatus();
@@ -172,6 +248,25 @@ export class RequestDetailComponent {
   }
 
   protected readonly formatDate = (value: string) => formatDate(value, true);
+
+  // Local-only reorder: mutates the request signal; not persisted to the backend.
+  protected onQuestionDrop(event: CdkDragDrop<GeneratedQuestion[]>): void {
+    if (event.previousIndex === event.currentIndex) return;
+    this.request.update((current) => {
+      if (!current) return current;
+      const generatedQuestions = [...current.generatedQuestions];
+      moveItemInArray(generatedQuestions, event.previousIndex, event.currentIndex);
+      return { ...current, generatedQuestions };
+    });
+  }
+
+  private exportWord(includeAnswers: boolean): void {
+    const request = this.request();
+    if (!request) return;
+    this.exportService.exportWord(request, { includeAnswers }).catch(() => {
+      this.toast.error('تعذر التصدير', 'حدث خطأ أثناء إنشاء ملف Word');
+    });
+  }
 
   private fetchRequest(): void {
     this.generationService.getRequestById(this.id()).subscribe({
