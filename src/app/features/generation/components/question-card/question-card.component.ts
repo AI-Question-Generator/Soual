@@ -2,16 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, input, signal } from '@an
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import type { GeneratedQuestion } from '@feature/generation/models';
-
-const CHOICE_LETTERS = ['a', 'b', 'c', 'd', 'e', 'f'];
-
-function choiceHash(seed: string): number {
-  let hash = 0;
-  for (let i = 0; i < seed.length; i++) {
-    hash = (hash * 31 + seed.charCodeAt(i)) | 0;
-  }
-  return hash;
-}
+import { choiceLetter, formatQuestionType, orderedChoices } from '@feature/generation/utils';
 
 @Component({
   selector: 'soual-question-card',
@@ -78,75 +69,20 @@ function choiceHash(seed: string): number {
   `,
 })
 export class QuestionCardComponent {
-  private static readonly TYPE_LABELS: Record<string, string> = {
-    mcq: 'MCQ',
-    short_answer: 'Short Answer',
-    true_false: 'TF',
-    tf: 'TF',
-  };
-
   question = input.required<GeneratedQuestion>();
   index = input<number>(0);
 
   protected readonly revealed = signal(false);
 
-  protected readonly typeLabel = computed(() =>
-    this.formatQuestionType(this.question().questionType),
-  );
+  protected readonly typeLabel = computed(() => formatQuestionType(this.question().questionType));
 
-  protected readonly choices = computed(() => {
-    const question = this.question();
-    const all = [question.correct_answer, ...(question.distractors ?? [])];
-
-    if (this.isTrueFalse(question.questionType)) {
-      if (all.length < 2) {
-        const counterpart = this.trueFalseCounterpart(question.correct_answer);
-        if (counterpart) all.push(counterpart);
-      }
-      // Conventional fixed order: True first, then False
-      return [...all].sort((a, b) => this.trueFalseRank(a) - this.trueFalseRank(b));
-    }
-
-    return [...all].sort(
-      (a, b) => choiceHash(`${question.id}:${a}`) - choiceHash(`${question.id}:${b}`),
-    );
-  });
+  protected readonly choices = computed(() => orderedChoices(this.question()));
 
   // A single option gives the answer away (e.g. short answer without distractors)
   protected readonly showChoices = computed(() => this.choices().length > 1);
 
   protected letterFor(index: number): string {
-    return CHOICE_LETTERS[index] ?? `${index + 1}`;
-  }
-
-  private isTrueFalse(type: string): boolean {
-    const normalized = type.toLowerCase();
-    return normalized === 'true_false' || normalized === 'tf';
-  }
-
-  private trueFalseCounterpart(correct: string): string | null {
-    const normalized = correct.trim().toLowerCase();
-    if (normalized !== 'true' && normalized !== 'false') return null;
-    const counterpart = normalized === 'true' ? 'false' : 'true';
-    if (correct === correct.toUpperCase()) return counterpart.toUpperCase();
-    if (correct.charAt(0) === correct.charAt(0).toUpperCase()) {
-      return counterpart.charAt(0).toUpperCase() + counterpart.slice(1);
-    }
-    return counterpart;
-  }
-
-  private trueFalseRank(choice: string): number {
-    return choice.trim().toLowerCase() === 'true' ? 0 : 1;
-  }
-
-  private formatQuestionType(type: string): string {
-    return (
-      QuestionCardComponent.TYPE_LABELS[type] ??
-      type
-        .split('_')
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(' ')
-    );
+    return choiceLetter(index);
   }
 
   protected readonly optionClasses = computed(() => {
