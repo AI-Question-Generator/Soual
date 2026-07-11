@@ -1,0 +1,1 @@
+import{a as n}from"./chunk-ROQKYTET.js";function a(t,o=!1){return t?new Intl.DateTimeFormat("ar-EG",n({dateStyle:"medium"},o?{timeStyle:"short"}:{})).format(new Date(t)):"\u2014"}function d(t,o){let r=URL.createObjectURL(t),e=document.createElement("a");e.href=r,e.download=o,document.body.appendChild(e),e.click(),e.remove(),URL.revokeObjectURL(r)}export{a,d as b};
