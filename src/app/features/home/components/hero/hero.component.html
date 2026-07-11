@@ -35,16 +35,18 @@
           size="large"
           styleClass="w-full sm:w-auto"
           class="w-full sm:w-auto flex-1 sm:flex-none"
+          (click)="startNow()"
         />
 
         <p-button
-          label="شاهد كيف تعمل "
-          icon="pi pi-external-link"
+          label="استكشف المزايا"
+          icon="pi pi-arrow-down"
           outlined
           severity="secondary"
           size="large"
           styleClass="w-full sm:w-auto"
           class="w-full sm:w-auto flex-1 sm:flex-none"
+          (click)="scrollToFeatures()"
         />
       </div>
       <!-- Trust Indicators -->
