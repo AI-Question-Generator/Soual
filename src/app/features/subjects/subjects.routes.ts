@@ -1,8 +1,11 @@
 import { Routes } from '@angular/router';
+import { authGuard } from '@core/guards';
 
 export const subjectRoutes: Routes = [
   {
     path: 'subjects',
+    canActivate: [authGuard],
+    canActivateChild: [authGuard],
     loadComponent: () =>
       import('@feature/subjects/pages/subjects-shell/subjects-shell.component').then(
         (m) => m.SubjectsShellComponent,
